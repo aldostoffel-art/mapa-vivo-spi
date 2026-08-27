@@ -11,141 +11,33 @@
 <script src="https://cdn.jsdelivr.net/npm/topojson-server@3"></script>
 
 <style>
-
-body{
-  font-family:Arial,Helvetica,sans-serif;
-  margin:0;
-  background:#f7f7f9;
-  color:#222;
-}
-
-.wrap{
-  max-width:1400px;
-  margin:auto;
-  padding:20px;
-}
-
-h1{
-  color:#5b21b6;
-  margin:0 0 4px;
-}
-
-.sub{
-  color:#666;
-  margin-bottom:14px;
-}
-
-.tabs{
-  display:flex;
-  gap:8px;
-  margin:16px 0;
-  flex-wrap:wrap;
-}
-
-.tab{
-  padding:12px 16px;
-  border:1px solid #ccc;
-  border-radius:10px;
-  background:#fff;
-  font-weight:700;
-  cursor:pointer;
-}
-
-.tab.on{
-  background:#6d28d9;
-  color:#fff;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:minmax(0,1fr) 350px;
-  gap:18px;
-  align-items:start;
-}
-
-.card{
-  background:#fff;
-  border:1px solid #ddd;
-  border-radius:14px;
-  padding:16px;
-  margin-bottom:12px;
-}
-
-svg{
-  width:100%;
-  height:auto;
-  display:block;
-}
-
-.sw{
-  display:inline-block;
-  width:16px;
-  height:16px;
-  border:1px solid #777;
-  margin-right:5px;
-  vertical-align:middle;
-}
-
+body{font-family:Arial,Helvetica,sans-serif;margin:0;background:#f7f7f9;color:#222}
+.wrap{max-width:1400px;margin:auto;padding:20px}
+h1{color:#5b21b6;margin:0 0 4px}
+.sub{color:#666;margin-bottom:14px}
+.tabs{display:flex;gap:8px;margin:16px 0;flex-wrap:wrap}
+.tab{padding:12px 16px;border:1px solid #ccc;border-radius:10px;background:#fff;font-weight:700;cursor:pointer}
+.tab.on{background:#6d28d9;color:#fff}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 350px;gap:18px;align-items:start}
+.card{background:#fff;border:1px solid #ddd;border-radius:14px;padding:16px;margin-bottom:12px}
+svg{width:100%;height:auto;display:block}
+.sw{display:inline-block;width:16px;height:16px;border:1px solid #777;margin-right:5px;vertical-align:middle}
 .purple{background:#6d28d9}
 .red{background:#d62828}
 .white{background:#fff}
-
-.orange-border{
-  background:#fff;
-  border:3px solid #f59e0b;
-}
-
-.ddd-line{
-  background:#fff;
-  border:3px solid #374151;
-}
-
-.legend{
-  display:flex;
-  gap:16px;
-  flex-wrap:wrap;
-  margin-top:10px;
-  font-size:14px;
-}
-
-.big{
-  font-size:38px;
-  font-weight:700;
-}
-
-.muted{
-  font-size:12px;
-  color:#666;
-  line-height:1.4;
-}
-
-.row{
-  padding:7px 0;
-  border-bottom:1px solid #eee;
-}
-
-.ok{
-  color:#15803d;
-  font-weight:bold;
-}
-
+.orange-border{background:#fff;border:3px solid #f59e0b}
+.ddd-line{background:#fff;border:3px solid #374151}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:10px;font-size:14px}
+.big{font-size:38px;font-weight:700}
+.muted{font-size:12px;color:#666;line-height:1.4}
+.row{padding:7px 0;border-bottom:1px solid #eee}
+.ok{color:#15803d;font-weight:bold}
 .ddd-label{
-  font-size:14px;
-  font-weight:800;
-  fill:#111827;
-  paint-order:stroke;
-  stroke:white;
-  stroke-width:4px;
-  stroke-linejoin:round;
-  pointer-events:none;
+ font-size:14px;font-weight:800;fill:#111827;
+ paint-order:stroke;stroke:white;stroke-width:4px;
+ stroke-linejoin:round;pointer-events:none
 }
-
-@media(max-width:800px){
-  .grid{
-    grid-template-columns:1fr;
-  }
-}
-
+@media(max-width:800px){.grid{grid-template-columns:1fr}}
 </style>
 </head>
 
@@ -156,254 +48,79 @@ svg{
 <h1>INTELIGÊNCIA DE FIBRA — SPI</h1>
 
 <div class="sub">
-Mapa municipal interativo • Vivo Fibra • Claro x Vivo • Divisão operacional por DDD
+Vivo Fibra • Claro x Vivo • População • Renda • Divisão por DDD
 </div>
 
 <div class="tabs">
-
-<button class="tab on" id="t1">
-Cobertura Vivo
-</button>
-
-<button class="tab" id="t2">
-Claro x Vivo
-</button>
-
+<button class="tab on" id="t1">Cobertura Vivo</button>
+<button class="tab" id="t2">Claro x Vivo</button>
 </div>
 
 <div class="grid">
 
 <div class="card">
-
-<div id="status">
-Carregando mapa...
-</div>
-
-<svg
-  id="map"
-  viewBox="0 0 900 610">
-</svg>
-
-<div
-  class="legend"
-  id="legend">
-</div>
-
+<div id="status">Carregando dados...</div>
+<svg id="map" viewBox="0 0 900 610"></svg>
+<div class="legend" id="legend"></div>
 </div>
 
 <aside>
 
 <div class="card">
-
 <b>Município selecionado</b>
-
-<div
-  id="details"
-  style="margin-top:10px">
-
+<div id="details" style="margin-top:10px">
 Clique em um município.
-
 </div>
-
-</div>
-
-<div class="card">
-
-<div class="muted">
-UNIVERSO OPERACIONAL SPI
-</div>
-
-<div class="big">
-574
-</div>
-
 </div>
 
 <div class="card">
-
-<div class="muted">
-BASE VIVO FIBRA INFORMADA
-</div>
-
-<div
-  class="big"
-  style="color:#6d28d9">
-
-132
-
-</div>
-
-<b>23,0%</b>
-
+<div class="muted">UNIVERSO OPERACIONAL SPI</div>
+<div class="big">574</div>
 </div>
 
 <div class="card">
-
-<div class="muted">
-OPORTUNIDADE &gt;25 MIL
-</div>
-
-<div
-  class="big"
-  id="oppCount">
-
-—
-
-</div>
-
-<b>
-sem Vivo dentro do recorte SPI
-</b>
-
-<div class="muted">
-Borda laranja no mapa
-</div>
-
-</div>
-
-<div
-  class="card"
-  id="claroCard"
-  style="display:none">
-
-<div class="muted">
-CLARO PRESENTE / VIVO AUSENTE
-</div>
-
-<div
-  class="big"
-  id="claroOpp">
-
-—
-
-</div>
-
-<b>
-municípios no recorte SPI
-</b>
-
+<div class="muted">VIVO FIBRA</div>
+<div class="big" style="color:#6d28d9">132</div>
+<b>23,0% do universo SPI</b>
 </div>
 
 <div class="card">
-
-<b>Divisão operacional</b>
-
-<div class="muted">
-
-DDD 11 — Grande Osasco<br>
-DDD 11 — Grande Jundiaí<br>
-DDD 12<br>
-DDD 14<br>
-DDD 15<br>
-DDD 16<br>
-DDD 17<br>
-DDD 18<br>
-DDD 19
-
-</div>
-
+<div class="muted">SEM VIVO</div>
+<div class="big">442</div>
+<b>77,0% do universo SPI</b>
 </div>
 
 <div class="card">
-
-<b>Fontes</b>
-
-<div class="muted">
-
-Vivo: base informada<br>
-População: Censo 2022 / IBGE<br>
-Claro Fibra: lista de cidades da Claro<br>
-Malha municipal: dados públicos baseados no IBGE
-
+<div class="muted">OPORTUNIDADE &gt;25 MIL HAB.</div>
+<div class="big" id="oppCount">—</div>
+<b>municípios sem Vivo</b>
+<div class="muted">Identificados pela borda laranja</div>
 </div>
 
+<div class="card" id="claroCard" style="display:none">
+<div class="muted">CLARO FIBRA / VIVO AUSENTE</div>
+<div class="big" id="claroOpp">—</div>
+<b>municípios no recorte SPI</b>
+</div>
+
+<div class="card">
+<b>Indicadores municipais</b>
+<div class="muted">
+População — Censo 2022<br>
+Renda domiciliar per capita — Censo 2022<br>
+DDD / região operacional<br>
+Cobertura Vivo Fibra<br>
+Cobertura Claro Fibra
+</div>
 </div>
 
 </aside>
-
 </div>
 </div>
 
 <script>
 
-const vivoRaw=`
-ADAMANTINA|AMERICANA|AMERICO BRASILIENSE|AMPARO|ANDRADINA|
-APARECIDA|ARACARIGUAMA|ARACATUBA|ARACOIABA DA SERRA|
-ARARAQUARA|ARARAS|ARTUR NOGUEIRA|ASSIS|ATIBAIA|AVARE|
-BARRA BONITA|BARRETOS|BARUERI|BAURU|BEBEDOURO|BIRIGUI|
-BOITUVA|BOTUCATU|BRAGANCA PAULISTA|CABREUVA|CACAPAVA|
-CAIEIRAS|CAJAMAR|CAMPINAS|CAMPO LIMPO PAULISTA|
-CAMPOS DO JORDAO|CAPIVARI|CARAGUATATUBA|CARAPICUIBA|
-CATANDUVA|CESARIO LANGE|COSMOPOLIS|COTIA|CRAVINHOS|
-CRUZEIRO|DESCALVADO|DRACENA|EMBU DAS ARTES|EMBU GUACU|
-ESPIRITO SANTO DO PINHAL|FERNANDOPOLIS|FRANCA|GARCA|
-GUARARAPES|GUARATINGUETA|HORTOLANDIA|IBIUNA|ILHABELA|
-INDAIATUBA|ITAPECERICA DA SERRA|ITAPETININGA|ITAPEVA|
-ITAPEVI|ITAPIRA|ITAPOLIS|ITATIBA|ITU|ITUPEVA|
-JABOTICABAL|JACAREI|JAGUARIUNA|JALES|JANDIRA|JAU|
-JUNDIAI|JUQUITIBA|LEME|LENCOIS PAULISTA|LIMEIRA|LINS|
-LORENA|LOUVEIRA|MAIRINQUE|MAIRIPORA|MARILIA|MATAO|
-MIRASSOL|MOCOCA|MOGI GUACU|MOGI MIRIM|MONTE MOR|
-NOVA ODESSA|OLIMPIA|OSASCO|OSVALDO CRUZ|OURINHOS|
-PARAGUACU PAULISTA|PAULINIA|PEDERNEIRAS|PEDREIRA|
-PENAPOLIS|PEREIRA BARRETO|PINDAMONHANGABA|PIRACICABA|
-PIRASSUNUNGA|PIRATININGA|PORTO FELIZ|PRESIDENTE PRUDENTE|
-RIBEIRAO PRETO|RIO CLARO|SALTO|SANTA BARBARA D OESTE|
-SANTA CRUZ DO RIO PARDO|SANTANA DE PARNAIBA|SAO CARLOS|
-SAO JOAO DA BOA VISTA|SAO JOSE DO RIO PARDO|
-SAO JOSE DO RIO PRETO|SAO JOSE DOS CAMPOS|SAO ROQUE|
-SAO SEBASTIAO|SERTAOZINHO|SOCORRO|SOROCABA|SUMARE|
-TABOAO DA SERRA|TATUI|TAUBATE|TIETE|TREMEMBE|TUPA|
-UBATUBA|VALINHOS|VARZEA PAULISTA|VINHEDO|VOTORANTIM|
-VOTUPORANGA
-`
-.replace(/\n/g,"")
-.split("|");
-
-const claroRaw=`
-ARACATUBA|GUARARAPES|GUARATINGUETA|PONTAL|
-SAO JOSE DO RIO PARDO|MONTE ALTO|CACHOEIRA PAULISTA|
-ORLANDIA|CRUZEIRO|ADAMANTINA|ITAPEVA|
-SANTA CRUZ DO RIO PARDO|DRACENA|JALES|IBIUNA|
-REGISTRO|LENCOIS PAULISTA|PRESIDENTE PRUDENTE|
-POTIM|PINDAMONHANGABA|MARILIA|LORENA|
-ITAPETININGA|BOTUCATU|APARECIDA|VOTUPORANGA|
-VALPARAISO|TAMBAU|SERRA NEGRA|SANTA ROSA DE VITERBO|
-SANTA CRUZ DAS PALMEIRAS|PROMISSAO|PRESIDENTE BERNARDES|
-POTIRENDABA|PORTO FERREIRA|PIRASSUNUNGA|PENAPOLIS|
-PEDREIRA|OURINHOS|OLIMPIA|MOCOCA|MIRANDOPOLIS|
-MATAO|LINS|LEME|LARANJAL PAULISTA|JOSE BONIFACIO|
-JARDINOPOLIS|JABOTICABAL|ITUVERAVA|ITAPIRA|IPERO|
-IBATE|GUAPIACU|GARCA|FERNANDOPOLIS|
-ESPIRITO SANTO DO PINHAL|DESCALVADO|CRAVINHOS|
-CERQUILHO|CATANDUVA|CASA BRANCA|CAMPOS DO JORDAO|
-BIRIGUI|BEBEDOURO|BATATAIS|BARRETOS|BADY BASSITT|
-AVARE|ANDRADINA|ALVARES MACHADO|AGUDOS|
-SAO JOAO DA BOA VISTA|TATUI|LOUVEIRA|TREMEMBE|
-SERRANA|SAO JOAQUIM DA BARRA|GUAIRA|PIEDADE|
-BOITUVA|BARRINHA|AMPARO|TIETE|SUMARE|SERTAOZINHO|
-SAO SEBASTIAO|SAO ROQUE|SANTANA DE PARNAIBA|
-SALTO|PORTO FELIZ|PIRACAIA|MORUNGABA|MONTE MOR|
-MOGI MIRIM|MAIRINQUE|JAGUARIUNA|EMBU DAS ARTES|
-MIRASSOL|NOVA ODESSA|JARINU|VINHEDO|UBATUBA|
-PAULINIA|JAU|JACAREI|ITUPEVA|VARZEA PAULISTA|
-RIO CLARO|HORTOLANDIA|VOTORANTIM|ITATIBA|ITU|
-MOGI GUACU|JANDIRA|TABOAO DA SERRA|TAUBATE|
-INDAIATUBA|SAO CARLOS|JUNDIAI|COTIA|LIMEIRA|
-PIRACICABA|ITAPEVI|OSASCO|ITAPECERICA DA SERRA|
-VALINHOS|FRANCA|SAO JOSE DO RIO PRETO|SOROCABA|
-RIBEIRAO PRETO|CORDEIROPOLIS|CABRALIA PAULISTA|
-CARAPICUIBA|CARAGUATATUBA|CAPIVARI|
-CAMPO LIMPO PAULISTA|CAMPINAS|CAJAMAR|CAIEIRAS|
-CACAPAVA|CABREUVA|BRAGANCA PAULISTA|BAURU|BARUERI|
-ATIBAIA|ARTUR NOGUEIRA|ARARAS|ARARAQUARA|
-AMERICO BRASILIENSE|AMERICANA|SAO JOSE DOS CAMPOS
-`
-.replace(/\n/g,"")
-.split("|");
-
 function norm(s){
-
  return String(s||"")
  .normalize("NFD")
  .replace(/[\u0300-\u036f]/g,"")
@@ -411,37 +128,47 @@ function norm(s){
  .replace(/[^A-Z0-9 ]/g," ")
  .replace(/\s+/g," ")
  .trim();
-
 }
 
+/* ===============================
+   BASE VIVO INFORMADA
+================================ */
+
+const vivoRaw=`ADAMANTINA|AMERICANA|AMERICO BRASILIENSE|AMPARO|ANDRADINA|APARECIDA|ARACARIGUAMA|ARACATUBA|ARACOIABA DA SERRA|ARARAQUARA|ARARAS|ARTUR NOGUEIRA|ASSIS|ATIBAIA|AVARE|BARRA BONITA|BARRETOS|BARUERI|BAURU|BEBEDOURO|BIRIGUI|BOITUVA|BOTUCATU|BRAGANCA PAULISTA|CABREUVA|CACAPAVA|CAIEIRAS|CAJAMAR|CAMPINAS|CAMPO LIMPO PAULISTA|CAMPOS DO JORDAO|CAPIVARI|CARAGUATATUBA|CARAPICUIBA|CATANDUVA|CESARIO LANGE|COSMOPOLIS|COTIA|CRAVINHOS|CRUZEIRO|DESCALVADO|DRACENA|EMBU DAS ARTES|EMBU GUACU|ESPIRITO SANTO DO PINHAL|FERNANDOPOLIS|FRANCA|GARCA|GUARARAPES|GUARATINGUETA|HORTOLANDIA|IBIUNA|ILHABELA|INDAIATUBA|ITAPECERICA DA SERRA|ITAPETININGA|ITAPEVA|ITAPEVI|ITAPIRA|ITAPOLIS|ITATIBA|ITU|ITUPEVA|JABOTICABAL|JACAREI|JAGUARIUNA|JALES|JANDIRA|JAU|JUNDIAI|JUQUITIBA|LEME|LENCOIS PAULISTA|LIMEIRA|LINS|LORENA|LOUVEIRA|MAIRINQUE|MAIRIPORA|MARILIA|MATAO|MIRASSOL|MOCOCA|MOGI GUACU|MOGI MIRIM|MONTE MOR|NOVA ODESSA|OLIMPIA|OSASCO|OSVALDO CRUZ|OURINHOS|PARAGUACU PAULISTA|PAULINIA|PEDERNEIRAS|PEDREIRA|PENAPOLIS|PEREIRA BARRETO|PINDAMONHANGABA|PIRACICABA|PIRASSUNUNGA|PIRATININGA|PORTO FELIZ|PRESIDENTE PRUDENTE|RIBEIRAO PRETO|RIO CLARO|SALTO|SANTA BARBARA D OESTE|SANTA CRUZ DO RIO PARDO|SANTANA DE PARNAIBA|SAO CARLOS|SAO JOAO DA BOA VISTA|SAO JOSE DO RIO PARDO|SAO JOSE DO RIO PRETO|SAO JOSE DOS CAMPOS|SAO ROQUE|SAO SEBASTIAO|SERTAOZINHO|SOCORRO|SOROCABA|SUMARE|TABOAO DA SERRA|TATUI|TAUBATE|TIETE|TREMEMBE|TUPA|UBATUBA|VALINHOS|VARZEA PAULISTA|VINHEDO|VOTORANTIM|VOTUPORANGA`;
+
 const vivo=
-new Set(vivoRaw.map(norm));
+new Set(
+ vivoRaw.split("|").map(norm)
+);
+
+/* ===============================
+   BASE CLARO
+================================ */
+
+const claroRaw=`ARACATUBA|GUARARAPES|GUARATINGUETA|PONTAL|SAO JOSE DO RIO PARDO|MONTE ALTO|CACHOEIRA PAULISTA|ORLANDIA|CRUZEIRO|ADAMANTINA|ITAPEVA|SANTA CRUZ DO RIO PARDO|DRACENA|JALES|IBIUNA|LENCOIS PAULISTA|PRESIDENTE PRUDENTE|PINDAMONHANGABA|MARILIA|LORENA|ITAPETININGA|BOTUCATU|APARECIDA|VOTUPORANGA|PIRASSUNUNGA|PENAPOLIS|PEDREIRA|OURINHOS|OLIMPIA|MOCOCA|MATAO|LINS|LEME|JABOTICABAL|ITAPIRA|GARCA|FERNANDOPOLIS|ESPIRITO SANTO DO PINHAL|DESCALVADO|CRAVINHOS|CATANDUVA|CAMPOS DO JORDAO|BIRIGUI|BEBEDOURO|BARRETOS|AVARE|ANDRADINA|SAO JOAO DA BOA VISTA|TATUI|LOUVEIRA|TREMEMBE|BOITUVA|AMPARO|TIETE|SUMARE|SERTAOZINHO|SAO SEBASTIAO|SAO ROQUE|SANTANA DE PARNAIBA|SALTO|PORTO FELIZ|MONTE MOR|MOGI MIRIM|MAIRINQUE|JAGUARIUNA|EMBU DAS ARTES|MIRASSOL|NOVA ODESSA|JARINU|VINHEDO|UBATUBA|PAULINIA|JAU|JACAREI|ITUPEVA|VARZEA PAULISTA|RIO CLARO|HORTOLANDIA|VOTORANTIM|ITATIBA|ITU|MOGI GUACU|JANDIRA|TABOAO DA SERRA|TAUBATE|INDAIATUBA|SAO CARLOS|JUNDIAI|COTIA|LIMEIRA|PIRACICABA|ITAPEVI|OSASCO|ITAPECERICA DA SERRA|VALINHOS|FRANCA|SAO JOSE DO RIO PRETO|SOROCABA|RIBEIRAO PRETO|CARAPICUIBA|CARAGUATATUBA|CAPIVARI|CAMPO LIMPO PAULISTA|CAMPINAS|CAJAMAR|CAIEIRAS|CACAPAVA|CABREUVA|BRAGANCA PAULISTA|BAURU|BARUERI|ATIBAIA|ARTUR NOGUEIRA|ARARAS|ARARAQUARA|AMERICO BRASILIENSE|AMERICANA|SAO JOSE DOS CAMPOS`;
 
 const claro=
-new Set(claroRaw.map(norm));
+new Set(
+ claroRaw.split("|").map(norm)
+);
+
+/* ===============================
+   DADOS
+================================ */
+
+let geo;
+let projection;
+let path;
 
 let mode="vivo";
 
-let geo;
+let pop=new Map();
+let renda=new Map();
+let ddd=new Map();
 
-let pop=
-new Map();
-
-let ddd=
-new Map();
-
-let spiNames=
-new Set();
-
-let opportunity=
-new Set();
-
-let claroSemVivo=
-new Set();
-
-let projection;
-
-let path;
+let spiNames=new Set();
+let opportunity=new Set();
+let claroSemVivo=new Set();
 
 const jundiai=
 new Set([
@@ -467,15 +194,11 @@ new Set([
 ]);
 
 const ddds=
-new Set([
-12,
-14,
-15,
-16,
-17,
-18,
-19
-]);
+new Set([12,14,15,16,17,18,19]);
+
+/* ===============================
+   FONTES
+================================ */
 
 const geoUrl=
 "https://raw.githubusercontent.com/tbrugz/geodata-br/refs/heads/master/geojson/geojs-35-mun.json";
@@ -486,51 +209,53 @@ const munUrl=
 const popUrl=
 "https://servicodados.ibge.gov.br/api/v3/agregados/4714/periodos/2022/variaveis/93?localidades=N6%5BN3%5B35%5D%5D";
 
+/*
+ Censo 2022
+ Tabela SIDRA 10295
+ Trabalho e rendimento
+*/
+const rendaUrl=
+"https://servicodados.ibge.gov.br/api/v3/agregados/10295/periodos/2022/variaveis?localidades=N6%5BN3%5B35%5D%5D";
+
+/* ===============================
+   CARREGAMENTO
+================================ */
+
 Promise.all([
 
- fetch(geoUrl)
- .then(r=>r.json()),
-
- fetch(munUrl)
- .then(r=>r.json()),
-
- fetch(popUrl)
- .then(r=>r.json())
+ fetch(geoUrl).then(r=>r.json()),
+ fetch(munUrl).then(r=>r.json()),
+ fetch(popUrl).then(r=>r.json()),
+ fetch(rendaUrl).then(r=>r.json())
 
 ])
 
-.then(([g,ms,pd])=>{
+.then(([g,ms,pd,rd])=>{
 
  geo=g;
 
+ /* DDD */
+
  ms
- .filter(
- x=>Number(x.codigo_uf)===35
- )
+ .filter(x=>Number(x.codigo_uf)===35)
  .forEach(x=>{
 
-   const n=
-   norm(x.nome);
+   const n=norm(x.nome);
+   const d=Number(x.ddd);
 
-   const d=
-   Number(x.ddd);
-
-   ddd.set(
-   n,
-   d
-   );
+   ddd.set(n,d);
 
    if(
      ddds.has(d) ||
      jundiai.has(n) ||
      osasco.has(n)
    ){
-
      spiNames.add(n);
-
    }
 
  });
+
+ /* POPULAÇÃO */
 
  (pd?.[0]?.resultados?.[0]?.series||[])
  .forEach(s=>{
@@ -538,10 +263,7 @@ Promise.all([
    const n=
    norm(
      (s.localidade?.nome||"")
-     .replace(
-       /\s*-\s*SP\s*$/i,
-       ""
-     )
+     .replace(/\s*-\s*SP\s*$/i,"")
    );
 
    const v=
@@ -553,15 +275,76 @@ Promise.all([
      n &&
      Number.isFinite(v)
    ){
-
-     pop.set(
-       n,
-       v
-     );
-
+     pop.set(n,v);
    }
 
  });
+
+ /* RENDA */
+
+ try{
+
+   /*
+    A resposta da tabela pode conter várias
+    variáveis. Procuramos especificamente
+    a variável cujo nome identifica
+    rendimento domiciliar per capita médio.
+   */
+
+   const bloco=
+   (rd||[]).find(x=>{
+
+     const nome=
+     norm(x.variavel||"");
+
+     return (
+       nome.includes("RENDIMENTO") &&
+       nome.includes("DOMICILIAR") &&
+       nome.includes("PER CAPITA") &&
+       nome.includes("MEDIO")
+     );
+
+   }) || rd?.[0];
+
+   (bloco?.resultados||[])
+   .forEach(resultado=>{
+
+     (resultado.series||[])
+     .forEach(s=>{
+
+       const n=
+       norm(
+         (s.localidade?.nome||"")
+         .replace(/\s*-\s*SP\s*$/i,"")
+       );
+
+       const valor=
+       Number(
+         s.serie?.["2022"]
+       );
+
+       if(
+         n &&
+         Number.isFinite(valor)
+       ){
+         renda.set(n,valor);
+       }
+
+     });
+
+   });
+
+ }
+ catch(err){
+
+   console.warn(
+     "Falha na leitura da renda IBGE",
+     err
+   );
+
+ }
+
+ /* OPORTUNIDADES */
 
  opportunity=
  new Set(
@@ -584,16 +367,12 @@ Promise.all([
  );
 
  document
- .getElementById(
- "oppCount"
- )
+ .getElementById("oppCount")
  .textContent=
  opportunity.size;
 
  document
- .getElementById(
- "claroOpp"
- )
+ .getElementById("claroOpp")
  .textContent=
  claroSemVivo.size;
 
@@ -605,62 +384,45 @@ Promise.all([
  );
 
  path=
- d3.geoPath(
-   projection
- );
+ d3.geoPath(projection);
 
  draw();
 
  document
- .getElementById(
- "status"
- )
+ .getElementById("status")
  .innerHTML=
- '<span class="ok">Mapa carregado — clique em um município</span>';
+ '<span class="ok">Mapa carregado — população e renda IBGE disponíveis</span>';
 
 })
 
 .catch(e=>{
 
  document
- .getElementById(
- "status"
- )
+ .getElementById("status")
  .textContent=
- "Erro ao carregar dados: "+
- e.message;
+ "Erro ao carregar dados: "+e.message;
 
 });
 
+/* ===============================
+   REGIÃO OPERACIONAL
+================================ */
+
 function operationalGroup(n){
 
- if(
-   osasco.has(n)
- ){
-
+ if(osasco.has(n)){
    return "11-OSASCO";
-
  }
 
- if(
-   jundiai.has(n)
- ){
-
+ if(jundiai.has(n)){
    return "11-JUNDIAI";
-
  }
 
  const d=
- ddd.get(n);
+ Number(ddd.get(n));
 
- if(
-   ddds.has(
-     Number(d)
-   )
- ){
-
+ if(ddds.has(d)){
    return String(d);
-
  }
 
  return null;
@@ -669,31 +431,25 @@ function operationalGroup(n){
 
 function groupLabel(g){
 
- if(
-   g==="11-OSASCO"
- ){
-
+ if(g==="11-OSASCO"){
    return "DDD 11 • Osasco";
-
  }
 
- if(
-   g==="11-JUNDIAI"
- ){
-
+ if(g==="11-JUNDIAI"){
    return "DDD 11 • Jundiaí";
-
  }
 
  return "DDD "+g;
 
 }
 
+/* ===============================
+   CORES
+================================ */
+
 function fillColor(n){
 
- if(
-   mode==="vivo"
- ){
+ if(mode==="vivo"){
 
    return vivo.has(n)
    ? "#6d28d9"
@@ -701,20 +457,12 @@ function fillColor(n){
 
  }
 
- if(
-   claroSemVivo.has(n)
- ){
-
+ if(claroSemVivo.has(n)){
    return "#d62828";
-
  }
 
- if(
-   vivo.has(n)
- ){
-
+ if(vivo.has(n)){
    return "#6d28d9";
-
  }
 
  return "#fff";
@@ -727,9 +475,7 @@ function strokeColor(n){
    mode==="vivo" &&
    opportunity.has(n)
  ){
-
    return "#f59e0b";
-
  }
 
  return "#9ca3af";
@@ -742,21 +488,21 @@ function strokeWidth(n){
    mode==="vivo" &&
    opportunity.has(n)
  ){
-
-   return 2.0;
-
+   return 2;
  }
 
  return .4;
 
 }
 
+/* ===============================
+   MAPA
+================================ */
+
 function draw(){
 
  const svg=
- d3.select(
- "#map"
- );
+ d3.select("#map");
 
  svg
  .selectAll("*")
@@ -764,28 +510,17 @@ function draw(){
 
  svg
  .append("g")
- .attr(
-   "class",
-   "municipios"
- )
  .selectAll("path")
- .data(
-   geo.features
- )
+ .data(geo.features)
  .join("path")
 
- .attr(
-   "d",
-   path
- )
+ .attr("d",path)
 
  .attr(
    "fill",
    d=>
    fillColor(
-     norm(
-       d.properties.name
-     )
+     norm(d.properties.name)
    )
  )
 
@@ -793,9 +528,7 @@ function draw(){
    "stroke",
    d=>
    strokeColor(
-     norm(
-       d.properties.name
-     )
+     norm(d.properties.name)
    )
  )
 
@@ -803,9 +536,7 @@ function draw(){
    "stroke-width",
    d=>
    strokeWidth(
-     norm(
-       d.properties.name
-     )
+     norm(d.properties.name)
    )
  )
 
@@ -815,35 +546,25 @@ function draw(){
  )
 
  .on(
- "click",
- function(e,d){
+   "click",
+   function(e,d){
 
-   draw();
+     show(
+       d.properties.name
+     );
 
-   d3
-   .select(this)
-   .attr(
-     "stroke",
-     "#111"
-   )
-   .attr(
-     "stroke-width",
-     2.8
-   );
-
-   show(
-     d.properties.name
-   );
-
- });
-
- drawDDDContours(
-   svg
+   }
  );
+
+ drawDDDContours(svg);
 
  legend();
 
 }
+
+/* ===============================
+   CONTORNOS DDD
+================================ */
 
 function drawDDDContours(svg){
 
@@ -867,21 +588,14 @@ function drawDDDContours(svg){
    const g=
    operationalGroup(n);
 
-   if(
-     !g
-   ){
+   if(!g){
      return;
    }
 
    if(
      !grupos.has(g)
    ){
-
-     grupos.set(
-       g,
-       []
-     );
-
+     grupos.set(g,[]);
    }
 
    grupos
@@ -921,43 +635,19 @@ function drawDDDContours(svg){
      svg
      .append("path")
      .datum(merged)
-     .attr(
-       "d",
-       path
-     )
-     .attr(
-       "fill",
-       "none"
-     )
-     .attr(
-       "stroke",
-       "#374151"
-     )
-     .attr(
-       "stroke-width",
-       2.3
-     )
-     .attr(
-       "stroke-linejoin",
-       "round"
-     )
-     .attr(
-       "pointer-events",
-       "none"
-     );
+     .attr("d",path)
+     .attr("fill","none")
+     .attr("stroke","#374151")
+     .attr("stroke-width",2.2)
+     .attr("stroke-linejoin","round")
+     .attr("pointer-events","none");
 
      const centroid=
-     path.centroid(
-       merged
-     );
+     path.centroid(merged);
 
      if(
-       Number.isFinite(
-         centroid[0]
-       ) &&
-       Number.isFinite(
-         centroid[1]
-       )
+       Number.isFinite(centroid[0]) &&
+       Number.isFinite(centroid[1])
      ){
 
        svg
@@ -988,7 +678,7 @@ function drawDDDContours(svg){
    catch(err){
 
      console.warn(
-       "Falha ao desenhar grupo",
+       "DDD",
        g,
        err
      );
@@ -999,17 +689,19 @@ function drawDDDContours(svg){
 
 }
 
+/* ===============================
+   LEGENDA
+================================ */
+
 function legend(){
 
  document
- .getElementById(
- "legend"
- )
+ .getElementById("legend")
  .innerHTML=
 
  mode==="vivo"
 
- ? `
+ ?`
 
  <span>
  <i class="sw purple"></i>
@@ -1033,7 +725,7 @@ function legend(){
 
  `
 
- : `
+ :`
 
  <span>
  <i class="sw red"></i>
@@ -1059,6 +751,10 @@ function legend(){
 
 }
 
+/* ===============================
+   PAINEL MUNICIPAL
+================================ */
+
 function show(name){
 
  const n=
@@ -1066,6 +762,9 @@ function show(name){
 
  const p=
  pop.get(n);
+
+ const r=
+ renda.get(n);
 
  const v=
  vivo.has(n);
@@ -1079,24 +778,36 @@ function show(name){
  const group=
  operationalGroup(n);
 
+ let rendaTexto="—";
+
+ if(
+   r &&
+   Number.isFinite(r)
+ ){
+
+   rendaTexto=
+   r.toLocaleString(
+     "pt-BR",
+     {
+       style:"currency",
+       currency:"BRL",
+       maximumFractionDigits:0
+     }
+   )+
+   " / mês";
+
+ }
+
  document
- .getElementById(
- "details"
- )
+ .getElementById("details")
  .innerHTML=`
 
  <div class="row">
-
- <b>
- ${name}
- </b>
-
+ <b>${name}</b>
  </div>
 
  <div class="row">
-
  Habitantes:
-
  <b>
  ${
  p
@@ -1104,26 +815,26 @@ function show(name){
  : "—"
  }
  </b>
-
  </div>
 
  <div class="row">
+ Renda domiciliar per capita:
+ <b>
+ ${rendaTexto}
+ </b>
+ </div>
 
+ <div class="row">
  DDD:
-
  <b>
  ${
- ddd.get(n)||
- "—"
+ ddd.get(n)||"—"
  }
  </b>
-
  </div>
 
  <div class="row">
-
  Região operacional:
-
  <b>
  ${
  group
@@ -1131,13 +842,10 @@ function show(name){
  : "Fora do recorte SPI"
  }
  </b>
-
  </div>
 
  <div class="row">
-
  Vivo Fibra:
-
  <b>
  ${
  v
@@ -1145,13 +853,10 @@ function show(name){
  : "NÃO"
  }
  </b>
-
  </div>
 
  <div class="row">
-
  Claro Fibra:
-
  <b>
  ${
  c
@@ -1159,13 +864,10 @@ function show(name){
  : "NÃO"
  }
  </b>
-
  </div>
 
  <div class="row">
-
  Oportunidade &gt;25 mil sem Vivo:
-
  <b>
  ${
  opp
@@ -1173,82 +875,49 @@ function show(name){
  : "NÃO"
  }
  </b>
-
  </div>
 
  `;
 
 }
 
+/* ===============================
+   ABAS
+================================ */
+
 document
-.getElementById(
-"t1"
-)
+.getElementById("t1")
 .onclick=()=>{
 
- mode=
- "vivo";
+ mode="vivo";
 
- t1
- .classList
- .add("on");
-
- t2
- .classList
- .remove("on");
+ t1.classList.add("on");
+ t2.classList.remove("on");
 
  document
- .getElementById(
- "claroCard"
- )
- .style
- .display=
+ .getElementById("claroCard")
+ .style.display=
  "none";
 
  draw();
 
- document
- .getElementById(
- "status"
- )
- .innerHTML=
- '<span class="ok">Cobertura Vivo + oportunidade demográfica + divisão DDD</span>';
-
 };
 
 document
-.getElementById(
-"t2"
-)
+.getElementById("t2")
 .onclick=()=>{
 
- mode=
- "claro";
+ mode="claro";
 
- t2
- .classList
- .add("on");
-
- t1
- .classList
- .remove("on");
+ t2.classList.add("on");
+ t1.classList.remove("on");
 
  document
- .getElementById(
- "claroCard"
- )
- .style
- .display=
+ .getElementById("claroCard")
+ .style.display=
  "block";
 
  draw();
-
- document
- .getElementById(
- "status"
- )
- .innerHTML=
- '<span class="ok">Vermelho = Claro Fibra presente e Vivo ausente</span>';
 
 };
 
