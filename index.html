@@ -3,32 +3,149 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+
 <title>Inteligência Fibra SPI</title>
 
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-server@3"></script>
 
 <style>
-body{font-family:Arial,Helvetica,sans-serif;margin:0;background:#f7f7f9;color:#222}
-.wrap{max-width:1400px;margin:auto;padding:20px}
-h1{color:#5b21b6;margin:0 0 4px}
-.sub{color:#666;margin-bottom:14px}
-.tabs{display:flex;gap:8px;margin:16px 0;flex-wrap:wrap}
-.tab{padding:12px 16px;border:1px solid #ccc;border-radius:10px;background:#fff;font-weight:700;cursor:pointer}
-.tab.on{background:#6d28d9;color:#fff}
-.grid{display:grid;grid-template-columns:minmax(0,1fr) 350px;gap:18px;align-items:start}
-.card{background:#fff;border:1px solid #ddd;border-radius:14px;padding:16px;margin-bottom:12px}
-svg{width:100%;height:auto;display:block}
-.sw{display:inline-block;width:16px;height:16px;border:1px solid #777;margin-right:5px;vertical-align:middle}
+
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  margin:0;
+  background:#f7f7f9;
+  color:#222;
+}
+
+.wrap{
+  max-width:1400px;
+  margin:auto;
+  padding:20px;
+}
+
+h1{
+  color:#5b21b6;
+  margin:0 0 4px;
+}
+
+.sub{
+  color:#666;
+  margin-bottom:14px;
+}
+
+.tabs{
+  display:flex;
+  gap:8px;
+  margin:16px 0;
+  flex-wrap:wrap;
+}
+
+.tab{
+  padding:12px 16px;
+  border:1px solid #ccc;
+  border-radius:10px;
+  background:#fff;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.tab.on{
+  background:#6d28d9;
+  color:#fff;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 350px;
+  gap:18px;
+  align-items:start;
+}
+
+.card{
+  background:#fff;
+  border:1px solid #ddd;
+  border-radius:14px;
+  padding:16px;
+  margin-bottom:12px;
+}
+
+svg{
+  width:100%;
+  height:auto;
+  display:block;
+}
+
+.sw{
+  display:inline-block;
+  width:16px;
+  height:16px;
+  border:1px solid #777;
+  margin-right:5px;
+  vertical-align:middle;
+}
+
 .purple{background:#6d28d9}
 .red{background:#d62828}
 .white{background:#fff}
-.orange-border{background:#fff;border:3px solid #f59e0b}
-.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:10px;font-size:14px}
-.big{font-size:38px;font-weight:700}
-.muted{font-size:12px;color:#666;line-height:1.4}
-.row{padding:7px 0;border-bottom:1px solid #eee}
-.ok{color:#15803d;font-weight:bold}
-@media(max-width:800px){.grid{grid-template-columns:1fr}}
+
+.orange-border{
+  background:#fff;
+  border:3px solid #f59e0b;
+}
+
+.ddd-line{
+  background:#fff;
+  border:3px solid #374151;
+}
+
+.legend{
+  display:flex;
+  gap:16px;
+  flex-wrap:wrap;
+  margin-top:10px;
+  font-size:14px;
+}
+
+.big{
+  font-size:38px;
+  font-weight:700;
+}
+
+.muted{
+  font-size:12px;
+  color:#666;
+  line-height:1.4;
+}
+
+.row{
+  padding:7px 0;
+  border-bottom:1px solid #eee;
+}
+
+.ok{
+  color:#15803d;
+  font-weight:bold;
+}
+
+.ddd-label{
+  font-size:14px;
+  font-weight:800;
+  fill:#111827;
+  paint-order:stroke;
+  stroke:white;
+  stroke-width:4px;
+  stroke-linejoin:round;
+  pointer-events:none;
+}
+
+@media(max-width:800px){
+  .grid{
+    grid-template-columns:1fr;
+  }
+}
+
 </style>
 </head>
 
@@ -39,76 +156,254 @@ svg{width:100%;height:auto;display:block}
 <h1>INTELIGÊNCIA DE FIBRA — SPI</h1>
 
 <div class="sub">
-Mapa municipal interativo • Vivo Fibra • Oportunidade demográfica • Claro x Vivo
+Mapa municipal interativo • Vivo Fibra • Claro x Vivo • Divisão operacional por DDD
 </div>
 
 <div class="tabs">
-<button class="tab on" id="t1">Cobertura Vivo</button>
-<button class="tab" id="t2">Claro x Vivo</button>
+
+<button class="tab on" id="t1">
+Cobertura Vivo
+</button>
+
+<button class="tab" id="t2">
+Claro x Vivo
+</button>
+
 </div>
 
 <div class="grid">
 
 <div class="card">
-<div id="status">Carregando mapa...</div>
-<svg id="map" viewBox="0 0 900 610"></svg>
-<div class="legend" id="legend"></div>
+
+<div id="status">
+Carregando mapa...
+</div>
+
+<svg
+  id="map"
+  viewBox="0 0 900 610">
+</svg>
+
+<div
+  class="legend"
+  id="legend">
+</div>
+
 </div>
 
 <aside>
 
 <div class="card">
+
 <b>Município selecionado</b>
-<div id="details" style="margin-top:10px">
+
+<div
+  id="details"
+  style="margin-top:10px">
+
 Clique em um município.
+
 </div>
+
 </div>
 
 <div class="card">
-<div class="muted">UNIVERSO OPERACIONAL SPI</div>
-<div class="big">574</div>
-</div>
 
-<div class="card">
-<div class="muted">BASE VIVO FIBRA INFORMADA</div>
-<div class="big" style="color:#6d28d9">132</div>
-<b>23,0%</b>
-</div>
-
-<div class="card">
-<div class="muted">OPORTUNIDADE &gt;25 MIL</div>
-<div class="big" id="oppCount">—</div>
-<b>sem Vivo dentro do recorte SPI</b>
-<div class="muted">Borda laranja no mapa</div>
-</div>
-
-<div class="card" id="claroCard" style="display:none">
-<div class="muted">CLARO PRESENTE / VIVO AUSENTE</div>
-<div class="big" id="claroOpp">—</div>
-<b>municípios no recorte SPI</b>
-</div>
-
-<div class="card">
-<b>Fontes</b>
 <div class="muted">
+UNIVERSO OPERACIONAL SPI
+</div>
+
+<div class="big">
+574
+</div>
+
+</div>
+
+<div class="card">
+
+<div class="muted">
+BASE VIVO FIBRA INFORMADA
+</div>
+
+<div
+  class="big"
+  style="color:#6d28d9">
+
+132
+
+</div>
+
+<b>23,0%</b>
+
+</div>
+
+<div class="card">
+
+<div class="muted">
+OPORTUNIDADE &gt;25 MIL
+</div>
+
+<div
+  class="big"
+  id="oppCount">
+
+—
+
+</div>
+
+<b>
+sem Vivo dentro do recorte SPI
+</b>
+
+<div class="muted">
+Borda laranja no mapa
+</div>
+
+</div>
+
+<div
+  class="card"
+  id="claroCard"
+  style="display:none">
+
+<div class="muted">
+CLARO PRESENTE / VIVO AUSENTE
+</div>
+
+<div
+  class="big"
+  id="claroOpp">
+
+—
+
+</div>
+
+<b>
+municípios no recorte SPI
+</b>
+
+</div>
+
+<div class="card">
+
+<b>Divisão operacional</b>
+
+<div class="muted">
+
+DDD 11 — Grande Osasco<br>
+DDD 11 — Grande Jundiaí<br>
+DDD 12<br>
+DDD 14<br>
+DDD 15<br>
+DDD 16<br>
+DDD 17<br>
+DDD 18<br>
+DDD 19
+
+</div>
+
+</div>
+
+<div class="card">
+
+<b>Fontes</b>
+
+<div class="muted">
+
 Vivo: base informada<br>
 População: Censo 2022 / IBGE<br>
-Claro Fibra: lista oficial de cidades da Claro<br>
+Claro Fibra: lista de cidades da Claro<br>
 Malha municipal: dados públicos baseados no IBGE
+
 </div>
+
 </div>
 
 </aside>
+
 </div>
 </div>
 
 <script>
 
-const vivoRaw=`ADAMANTINA|AMERICANA|AMERICO BRASILIENSE|AMPARO|ANDRADINA|APARECIDA|ARACARIGUAMA|ARACATUBA|ARACOIABA DA SERRA|ARARAQUARA|ARARAS|ARTUR NOGUEIRA|ASSIS|ATIBAIA|AVARE|BARRA BONITA|BARRETOS|BARUERI|BAURU|BEBEDOURO|BIRIGUI|BOITUVA|BOTUCATU|BRAGANCA PAULISTA|CABREUVA|CACAPAVA|CAIEIRAS|CAJAMAR|CAMPINAS|CAMPO LIMPO PAULISTA|CAMPOS DO JORDAO|CAPIVARI|CARAGUATATUBA|CARAPICUIBA|CATANDUVA|CESARIO LANGE|COSMOPOLIS|COTIA|CRAVINHOS|CRUZEIRO|DESCALVADO|DRACENA|EMBU DAS ARTES|EMBU GUACU|ESPIRITO SANTO DO PINHAL|FERNANDOPOLIS|FRANCA|GARCA|GUARARAPES|GUARATINGUETA|HORTOLANDIA|IBIUNA|ILHABELA|INDAIATUBA|ITAPECERICA DA SERRA|ITAPETININGA|ITAPEVA|ITAPEVI|ITAPIRA|ITAPOLIS|ITATIBA|ITU|ITUPEVA|JABOTICABAL|JACAREI|JAGUARIUNA|JALES|JANDIRA|JAU|JUNDIAI|JUQUITIBA|LEME|LENCOIS PAULISTA|LIMEIRA|LINS|LORENA|LOUVEIRA|MAIRINQUE|MAIRIPORA|MARILIA|MATAO|MIRASSOL|MOCOCA|MOGI GUACU|MOGI MIRIM|MONTE MOR|NOVA ODESSA|OLIMPIA|OSASCO|OSVALDO CRUZ|OURINHOS|PARAGUACU PAULISTA|PAULINIA|PEDERNEIRAS|PEDREIRA|PENAPOLIS|PEREIRA BARRETO|PINDAMONHANGABA|PIRACICABA|PIRASSUNUNGA|PIRATININGA|PORTO FELIZ|PRESIDENTE PRUDENTE|RIBEIRAO PRETO|RIO CLARO|SALTO|SANTA BARBARA D OESTE|SANTA CRUZ DO RIO PARDO|SANTANA DE PARNAIBA|SAO CARLOS|SAO JOAO DA BOA VISTA|SAO JOSE DO RIO PARDO|SAO JOSE DO RIO PRETO|SAO JOSE DOS CAMPOS|SAO ROQUE|SAO SEBASTIAO|SERTAOZINHO|SOCORRO|SOROCABA|SUMARE|TABOAO DA SERRA|TATUI|TAUBATE|TIETE|TREMEMBE|TUPA|UBATUBA|VALINHOS|VARZEA PAULISTA|VINHEDO|VOTORANTIM|VOTUPORANGA`.split("|");
+const vivoRaw=`
+ADAMANTINA|AMERICANA|AMERICO BRASILIENSE|AMPARO|ANDRADINA|
+APARECIDA|ARACARIGUAMA|ARACATUBA|ARACOIABA DA SERRA|
+ARARAQUARA|ARARAS|ARTUR NOGUEIRA|ASSIS|ATIBAIA|AVARE|
+BARRA BONITA|BARRETOS|BARUERI|BAURU|BEBEDOURO|BIRIGUI|
+BOITUVA|BOTUCATU|BRAGANCA PAULISTA|CABREUVA|CACAPAVA|
+CAIEIRAS|CAJAMAR|CAMPINAS|CAMPO LIMPO PAULISTA|
+CAMPOS DO JORDAO|CAPIVARI|CARAGUATATUBA|CARAPICUIBA|
+CATANDUVA|CESARIO LANGE|COSMOPOLIS|COTIA|CRAVINHOS|
+CRUZEIRO|DESCALVADO|DRACENA|EMBU DAS ARTES|EMBU GUACU|
+ESPIRITO SANTO DO PINHAL|FERNANDOPOLIS|FRANCA|GARCA|
+GUARARAPES|GUARATINGUETA|HORTOLANDIA|IBIUNA|ILHABELA|
+INDAIATUBA|ITAPECERICA DA SERRA|ITAPETININGA|ITAPEVA|
+ITAPEVI|ITAPIRA|ITAPOLIS|ITATIBA|ITU|ITUPEVA|
+JABOTICABAL|JACAREI|JAGUARIUNA|JALES|JANDIRA|JAU|
+JUNDIAI|JUQUITIBA|LEME|LENCOIS PAULISTA|LIMEIRA|LINS|
+LORENA|LOUVEIRA|MAIRINQUE|MAIRIPORA|MARILIA|MATAO|
+MIRASSOL|MOCOCA|MOGI GUACU|MOGI MIRIM|MONTE MOR|
+NOVA ODESSA|OLIMPIA|OSASCO|OSVALDO CRUZ|OURINHOS|
+PARAGUACU PAULISTA|PAULINIA|PEDERNEIRAS|PEDREIRA|
+PENAPOLIS|PEREIRA BARRETO|PINDAMONHANGABA|PIRACICABA|
+PIRASSUNUNGA|PIRATININGA|PORTO FELIZ|PRESIDENTE PRUDENTE|
+RIBEIRAO PRETO|RIO CLARO|SALTO|SANTA BARBARA D OESTE|
+SANTA CRUZ DO RIO PARDO|SANTANA DE PARNAIBA|SAO CARLOS|
+SAO JOAO DA BOA VISTA|SAO JOSE DO RIO PARDO|
+SAO JOSE DO RIO PRETO|SAO JOSE DOS CAMPOS|SAO ROQUE|
+SAO SEBASTIAO|SERTAOZINHO|SOCORRO|SOROCABA|SUMARE|
+TABOAO DA SERRA|TATUI|TAUBATE|TIETE|TREMEMBE|TUPA|
+UBATUBA|VALINHOS|VARZEA PAULISTA|VINHEDO|VOTORANTIM|
+VOTUPORANGA
+`
+.replace(/\n/g,"")
+.split("|");
 
-const claroRaw=`ARACATUBA|GUARARAPES|GUARATINGUETA|PONTAL|SAO JOSE DO RIO PARDO|MONTE ALTO|CACHOEIRA PAULISTA|ORLANDIA|CRUZEIRO|ADAMANTINA|ITAPEVA|SANTA CRUZ DO RIO PARDO|DRACENA|JALES|IBIUNA|REGISTRO|LENCOIS PAULISTA|PRESIDENTE PRUDENTE|POTIM|PINDAMONHANGABA|MARILIA|LORENA|ITAPETININGA|BOTUCATU|APARECIDA|VOTUPORANGA|VALPARAISO|TAMBAU|SERRA NEGRA|SANTA ROSA DE VITERBO|SANTA CRUZ DAS PALMEIRAS|PROMISSAO|PRESIDENTE BERNARDES|POTIRENDABA|PORTO FERREIRA|PIRASSUNUNGA|PENAPOLIS|PEDREIRA|OURINHOS|OLIMPIA|MOCOCA|MIRANDOPOLIS|MATAO|LINS|LEME|LARANJAL PAULISTA|JOSE BONIFACIO|JARDINOPOLIS|JABOTICABAL|ITUVERAVA|ITAPIRA|IPERO|IBATE|GUAPIACU|GARCA|FERNANDOPOLIS|ESPIRITO SANTO DO PINHAL|DESCALVADO|CRAVINHOS|CERQUILHO|CATANDUVA|CASA BRANCA|CAMPOS DO JORDAO|BIRIGUI|BEBEDOURO|BATATAIS|BARRETOS|BADY BASSITT|AVARE|ANDRADINA|ALVARES MACHADO|AGUDOS|SAO JOAO DA BOA VISTA|TATUI|LOUVEIRA|TREMEMBE|SERRANA|SAO JOAQUIM DA BARRA|GUAIRA|PIEDADE|BOITUVA|BARRINHA|AMPARO|TIETE|SUMARE|SERTAOZINHO|SAO SEBASTIAO|SAO ROQUE|SAO CAETANO DO SUL|SANTANA DE PARNAIBA|SANTA ISABEL|SANTA GERTRUDES|SALTO|RIBEIRAO PIRES|PORTO FELIZ|PIRACAIA|MORUNGABA|MONTE MOR|MOGI MIRIM|MAIRINQUE|JAGUARIUNA|EMBU DAS ARTES|ELIAS FAUSTO|CUBATAO|MIRASSOL|NOVA ODESSA|VARGEM GRANDE PAULISTA|POA|JARINU|VINHEDO|UBATUBA|PAULINIA|JAU|JACAREI|ITUPEVA|VARZEA PAULISTA|RIO CLARO|HORTOLANDIA|VOTORANTIM|ITATIBA|SANTOS|ITU|SAO BERNARDO DO CAMPO|MOGI GUACU|MAUA|JANDIRA|MONGAGUA|TABOAO DA SERRA|SANTO ANDRE|TAUBATE|PERUIBE|INDAIATUBA|SAO CARLOS|JUNDIAI|ITANHAEM|COTIA|DIADEMA|LIMEIRA|SUZANO|PIRACICABA|ITAPEVI|OSASCO|PRAIA GRANDE|SAO PAULO|ITAPECERICA DA SERRA|VALINHOS|FRANCA|ITAQUAQUECETUBA|SAO VICENTE|MOGI DAS CRUZES|SAO JOSE DO RIO PRETO|SOROCABA|RIBEIRAO PRETO|CORDEIROPOLIS|CABRALIA PAULISTA|CARAPICUIBA|CARAGUATATUBA|GUARULHOS|CAPIVARI|CAMPO LIMPO PAULISTA|CAMPINAS|CAJAMAR|CAIEIRAS|CACAPAVA|CABREUVA|BRAGANCA PAULISTA|BAURU|BARUERI|ATIBAIA|ARUJA|ARTUR NOGUEIRA|ARARAS|ARARAQUARA|AMERICO BRASILIENSE|AMERICANA|ALUMINIO|GUARUJA|SAO JOSE DOS CAMPOS|BERTIOGA`.split("|");
+const claroRaw=`
+ARACATUBA|GUARARAPES|GUARATINGUETA|PONTAL|
+SAO JOSE DO RIO PARDO|MONTE ALTO|CACHOEIRA PAULISTA|
+ORLANDIA|CRUZEIRO|ADAMANTINA|ITAPEVA|
+SANTA CRUZ DO RIO PARDO|DRACENA|JALES|IBIUNA|
+REGISTRO|LENCOIS PAULISTA|PRESIDENTE PRUDENTE|
+POTIM|PINDAMONHANGABA|MARILIA|LORENA|
+ITAPETININGA|BOTUCATU|APARECIDA|VOTUPORANGA|
+VALPARAISO|TAMBAU|SERRA NEGRA|SANTA ROSA DE VITERBO|
+SANTA CRUZ DAS PALMEIRAS|PROMISSAO|PRESIDENTE BERNARDES|
+POTIRENDABA|PORTO FERREIRA|PIRASSUNUNGA|PENAPOLIS|
+PEDREIRA|OURINHOS|OLIMPIA|MOCOCA|MIRANDOPOLIS|
+MATAO|LINS|LEME|LARANJAL PAULISTA|JOSE BONIFACIO|
+JARDINOPOLIS|JABOTICABAL|ITUVERAVA|ITAPIRA|IPERO|
+IBATE|GUAPIACU|GARCA|FERNANDOPOLIS|
+ESPIRITO SANTO DO PINHAL|DESCALVADO|CRAVINHOS|
+CERQUILHO|CATANDUVA|CASA BRANCA|CAMPOS DO JORDAO|
+BIRIGUI|BEBEDOURO|BATATAIS|BARRETOS|BADY BASSITT|
+AVARE|ANDRADINA|ALVARES MACHADO|AGUDOS|
+SAO JOAO DA BOA VISTA|TATUI|LOUVEIRA|TREMEMBE|
+SERRANA|SAO JOAQUIM DA BARRA|GUAIRA|PIEDADE|
+BOITUVA|BARRINHA|AMPARO|TIETE|SUMARE|SERTAOZINHO|
+SAO SEBASTIAO|SAO ROQUE|SANTANA DE PARNAIBA|
+SALTO|PORTO FELIZ|PIRACAIA|MORUNGABA|MONTE MOR|
+MOGI MIRIM|MAIRINQUE|JAGUARIUNA|EMBU DAS ARTES|
+MIRASSOL|NOVA ODESSA|JARINU|VINHEDO|UBATUBA|
+PAULINIA|JAU|JACAREI|ITUPEVA|VARZEA PAULISTA|
+RIO CLARO|HORTOLANDIA|VOTORANTIM|ITATIBA|ITU|
+MOGI GUACU|JANDIRA|TABOAO DA SERRA|TAUBATE|
+INDAIATUBA|SAO CARLOS|JUNDIAI|COTIA|LIMEIRA|
+PIRACICABA|ITAPEVI|OSASCO|ITAPECERICA DA SERRA|
+VALINHOS|FRANCA|SAO JOSE DO RIO PRETO|SOROCABA|
+RIBEIRAO PRETO|CORDEIROPOLIS|CABRALIA PAULISTA|
+CARAPICUIBA|CARAGUATATUBA|CAPIVARI|
+CAMPO LIMPO PAULISTA|CAMPINAS|CAJAMAR|CAIEIRAS|
+CACAPAVA|CABREUVA|BRAGANCA PAULISTA|BAURU|BARUERI|
+ATIBAIA|ARTUR NOGUEIRA|ARARAS|ARARAQUARA|
+AMERICO BRASILIENSE|AMERICANA|SAO JOSE DOS CAMPOS
+`
+.replace(/\n/g,"")
+.split("|");
 
 function norm(s){
+
  return String(s||"")
  .normalize("NFD")
  .replace(/[\u0300-\u036f]/g,"")
@@ -116,18 +411,71 @@ function norm(s){
  .replace(/[^A-Z0-9 ]/g," ")
  .replace(/\s+/g," ")
  .trim();
+
 }
 
-const vivo=new Set(vivoRaw.map(norm));
-const claro=new Set(claroRaw.map(norm));
+const vivo=
+new Set(vivoRaw.map(norm));
+
+const claro=
+new Set(claroRaw.map(norm));
 
 let mode="vivo";
+
 let geo;
-let pop=new Map();
-let ddd=new Map();
-let spiNames=new Set();
-let opportunity=new Set();
-let claroSemVivo=new Set();
+
+let pop=
+new Map();
+
+let ddd=
+new Map();
+
+let spiNames=
+new Set();
+
+let opportunity=
+new Set();
+
+let claroSemVivo=
+new Set();
+
+let projection;
+
+let path;
+
+const jundiai=
+new Set([
+"CABREUVA",
+"CAMPO LIMPO PAULISTA",
+"ITUPEVA",
+"JARINU",
+"JUNDIAI",
+"LOUVEIRA",
+"VARZEA PAULISTA"
+]);
+
+const osasco=
+new Set([
+"OSASCO",
+"BARUERI",
+"CARAPICUIBA",
+"COTIA",
+"ITAPEVI",
+"JANDIRA",
+"PIRAPORA DO BOM JESUS",
+"SANTANA DE PARNAIBA"
+]);
+
+const ddds=
+new Set([
+12,
+14,
+15,
+16,
+17,
+18,
+19
+]);
 
 const geoUrl=
 "https://raw.githubusercontent.com/tbrugz/geodata-br/refs/heads/master/geojson/geojs-35-mun.json";
@@ -139,52 +487,47 @@ const popUrl=
 "https://servicodados.ibge.gov.br/api/v3/agregados/4714/periodos/2022/variaveis/93?localidades=N6%5BN3%5B35%5D%5D";
 
 Promise.all([
- fetch(geoUrl).then(r=>r.json()),
- fetch(munUrl).then(r=>r.json()),
- fetch(popUrl).then(r=>r.json())
+
+ fetch(geoUrl)
+ .then(r=>r.json()),
+
+ fetch(munUrl)
+ .then(r=>r.json()),
+
+ fetch(popUrl)
+ .then(r=>r.json())
+
 ])
 
 .then(([g,ms,pd])=>{
 
  geo=g;
 
- const jundiai=new Set([
- "CABREUVA",
- "CAMPO LIMPO PAULISTA",
- "ITUPEVA",
- "JARINU",
- "JUNDIAI",
- "LOUVEIRA",
- "VARZEA PAULISTA"
- ]);
-
- const osasco=new Set([
- "OSASCO",
- "BARUERI",
- "CARAPICUIBA",
- "COTIA",
- "ITAPEVI",
- "JANDIRA",
- "PIRAPORA DO BOM JESUS",
- "SANTANA DE PARNAIBA"
- ]);
-
- const ddds=new Set([12,14,15,16,17,18,19]);
-
- ms.filter(x=>Number(x.codigo_uf)===35)
+ ms
+ .filter(
+ x=>Number(x.codigo_uf)===35
+ )
  .forEach(x=>{
 
-   const n=norm(x.nome);
-   const d=Number(x.ddd);
+   const n=
+   norm(x.nome);
 
-   ddd.set(n,d);
+   const d=
+   Number(x.ddd);
+
+   ddd.set(
+   n,
+   d
+   );
 
    if(
      ddds.has(d) ||
      jundiai.has(n) ||
      osasco.has(n)
    ){
+
      spiNames.add(n);
+
    }
 
  });
@@ -192,68 +535,190 @@ Promise.all([
  (pd?.[0]?.resultados?.[0]?.series||[])
  .forEach(s=>{
 
-   const n=norm(
+   const n=
+   norm(
      (s.localidade?.nome||"")
-     .replace(/\s*-\s*SP\s*$/i,"")
+     .replace(
+       /\s*-\s*SP\s*$/i,
+       ""
+     )
    );
 
-   const v=Number(s.serie?.["2022"]);
+   const v=
+   Number(
+     s.serie?.["2022"]
+   );
 
-   if(n && Number.isFinite(v)){
-     pop.set(n,v);
+   if(
+     n &&
+     Number.isFinite(v)
+   ){
+
+     pop.set(
+       n,
+       v
+     );
+
    }
 
  });
 
- opportunity=new Set(
-   [...spiNames].filter(
-     n=>!vivo.has(n) && (pop.get(n)||0)>25000
+ opportunity=
+ new Set(
+   [...spiNames]
+   .filter(
+     n=>
+     !vivo.has(n) &&
+     (pop.get(n)||0)>25000
    )
  );
 
- claroSemVivo=new Set(
-   [...spiNames].filter(
-     n=>claro.has(n) && !vivo.has(n)
+ claroSemVivo=
+ new Set(
+   [...spiNames]
+   .filter(
+     n=>
+     claro.has(n) &&
+     !vivo.has(n)
    )
  );
 
- document.getElementById("oppCount").textContent=
+ document
+ .getElementById(
+ "oppCount"
+ )
+ .textContent=
  opportunity.size;
 
- document.getElementById("claroOpp").textContent=
+ document
+ .getElementById(
+ "claroOpp"
+ )
+ .textContent=
  claroSemVivo.size;
+
+ projection=
+ d3.geoMercator()
+ .fitExtent(
+   [[15,15],[885,595]],
+   geo
+ );
+
+ path=
+ d3.geoPath(
+   projection
+ );
 
  draw();
 
- document.getElementById("status").innerHTML=
+ document
+ .getElementById(
+ "status"
+ )
+ .innerHTML=
  '<span class="ok">Mapa carregado — clique em um município</span>';
 
 })
 
 .catch(e=>{
 
- document.getElementById("status").textContent=
- "Erro ao carregar dados: "+e.message;
+ document
+ .getElementById(
+ "status"
+ )
+ .textContent=
+ "Erro ao carregar dados: "+
+ e.message;
 
 });
 
+function operationalGroup(n){
+
+ if(
+   osasco.has(n)
+ ){
+
+   return "11-OSASCO";
+
+ }
+
+ if(
+   jundiai.has(n)
+ ){
+
+   return "11-JUNDIAI";
+
+ }
+
+ const d=
+ ddd.get(n);
+
+ if(
+   ddds.has(
+     Number(d)
+   )
+ ){
+
+   return String(d);
+
+ }
+
+ return null;
+
+}
+
+function groupLabel(g){
+
+ if(
+   g==="11-OSASCO"
+ ){
+
+   return "DDD 11 • Osasco";
+
+ }
+
+ if(
+   g==="11-JUNDIAI"
+ ){
+
+   return "DDD 11 • Jundiaí";
+
+ }
+
+ return "DDD "+g;
+
+}
+
 function fillColor(n){
 
- if(mode==="vivo"){
+ if(
+   mode==="vivo"
+ ){
+
    return vivo.has(n)
    ? "#6d28d9"
    : "#fff";
+
  }
 
- if(claroSemVivo.has(n)){
+ if(
+   claroSemVivo.has(n)
+ ){
+
    return "#d62828";
+
  }
 
- if(vivo.has(n)){
+ if(
+   vivo.has(n)
+ ){
+
    return "#6d28d9";
+
  }
 
  return "#fff";
+
 }
 
 function strokeColor(n){
@@ -262,10 +727,13 @@ function strokeColor(n){
    mode==="vivo" &&
    opportunity.has(n)
  ){
+
    return "#f59e0b";
+
  }
 
- return "#888";
+ return "#9ca3af";
+
 }
 
 function strokeWidth(n){
@@ -274,65 +742,275 @@ function strokeWidth(n){
    mode==="vivo" &&
    opportunity.has(n)
  ){
-   return 2.2;
+
+   return 2.0;
+
  }
 
- return .45;
+ return .4;
+
 }
 
 function draw(){
 
- const svg=d3.select("#map");
+ const svg=
+ d3.select(
+ "#map"
+ );
 
- svg.selectAll("*").remove();
+ svg
+ .selectAll("*")
+ .remove();
 
- const pr=d3.geoMercator()
- .fitExtent([[15,15],[885,595]],geo);
-
- const path=d3.geoPath(pr);
-
- svg.selectAll("path")
- .data(geo.features)
+ svg
+ .append("g")
+ .attr(
+   "class",
+   "municipios"
+ )
+ .selectAll("path")
+ .data(
+   geo.features
+ )
  .join("path")
 
- .attr("d",path)
-
- .attr("fill",d=>
-   fillColor(norm(d.properties.name))
+ .attr(
+   "d",
+   path
  )
 
- .attr("stroke",d=>
-   strokeColor(norm(d.properties.name))
+ .attr(
+   "fill",
+   d=>
+   fillColor(
+     norm(
+       d.properties.name
+     )
+   )
  )
 
- .attr("stroke-width",d=>
-   strokeWidth(norm(d.properties.name))
+ .attr(
+   "stroke",
+   d=>
+   strokeColor(
+     norm(
+       d.properties.name
+     )
+   )
  )
 
- .style("cursor","pointer")
+ .attr(
+   "stroke-width",
+   d=>
+   strokeWidth(
+     norm(
+       d.properties.name
+     )
+   )
+ )
 
- .on("click",function(e,d){
+ .style(
+   "cursor",
+   "pointer"
+ )
+
+ .on(
+ "click",
+ function(e,d){
 
    draw();
 
-   d3.select(this)
-   .attr("stroke","#111")
-   .attr("stroke-width",2.8);
+   d3
+   .select(this)
+   .attr(
+     "stroke",
+     "#111"
+   )
+   .attr(
+     "stroke-width",
+     2.8
+   );
 
-   show(d.properties.name);
+   show(
+     d.properties.name
+   );
 
  });
 
+ drawDDDContours(
+   svg
+ );
+
  legend();
+
+}
+
+function drawDDDContours(svg){
+
+ const grupos=
+ new Map();
+
+ geo.features
+ .forEach(f=>{
+
+   const n=
+   norm(
+     f.properties.name
+   );
+
+   if(
+     !spiNames.has(n)
+   ){
+     return;
+   }
+
+   const g=
+   operationalGroup(n);
+
+   if(
+     !g
+   ){
+     return;
+   }
+
+   if(
+     !grupos.has(g)
+   ){
+
+     grupos.set(
+       g,
+       []
+     );
+
+   }
+
+   grupos
+   .get(g)
+   .push(f);
+
+ });
+
+ grupos
+ .forEach(
+ (features,g)=>{
+
+   try{
+
+     const fc={
+       type:"FeatureCollection",
+       features
+     };
+
+     const topology=
+     topojson.topology({
+       municipios:fc
+     });
+
+     const geometries=
+     topology
+     .objects
+     .municipios
+     .geometries;
+
+     const merged=
+     topojson.merge(
+       topology,
+       geometries
+     );
+
+     svg
+     .append("path")
+     .datum(merged)
+     .attr(
+       "d",
+       path
+     )
+     .attr(
+       "fill",
+       "none"
+     )
+     .attr(
+       "stroke",
+       "#374151"
+     )
+     .attr(
+       "stroke-width",
+       2.3
+     )
+     .attr(
+       "stroke-linejoin",
+       "round"
+     )
+     .attr(
+       "pointer-events",
+       "none"
+     );
+
+     const centroid=
+     path.centroid(
+       merged
+     );
+
+     if(
+       Number.isFinite(
+         centroid[0]
+       ) &&
+       Number.isFinite(
+         centroid[1]
+       )
+     ){
+
+       svg
+       .append("text")
+       .attr(
+         "class",
+         "ddd-label"
+       )
+       .attr(
+         "x",
+         centroid[0]
+       )
+       .attr(
+         "y",
+         centroid[1]
+       )
+       .attr(
+         "text-anchor",
+         "middle"
+       )
+       .text(
+         groupLabel(g)
+       );
+
+     }
+
+   }
+   catch(err){
+
+     console.warn(
+       "Falha ao desenhar grupo",
+       g,
+       err
+     );
+
+   }
+
+ });
+
 }
 
 function legend(){
 
- document.getElementById("legend").innerHTML=
+ document
+ .getElementById(
+ "legend"
+ )
+ .innerHTML=
 
  mode==="vivo"
 
  ? `
+
  <span>
  <i class="sw purple"></i>
  Vivo Fibra
@@ -344,12 +1022,19 @@ function legend(){
  </span>
 
  <span>
- <i class="sw white"></i>
- Demais
+ <i class="sw ddd-line"></i>
+ Limite de DDD
  </span>
+
+ <span>
+ <i class="sw white"></i>
+ Demais municípios
+ </span>
+
  `
 
  : `
+
  <span>
  <i class="sw red"></i>
  Claro Fibra / Vivo ausente
@@ -361,86 +1046,208 @@ function legend(){
  </span>
 
  <span>
- <i class="sw white"></i>
- Demais
+ <i class="sw ddd-line"></i>
+ Limite de DDD
  </span>
+
+ <span>
+ <i class="sw white"></i>
+ Demais municípios
+ </span>
+
  `;
+
 }
 
 function show(name){
 
- const n=norm(name);
- const p=pop.get(n);
- const v=vivo.has(n);
- const c=claro.has(n);
- const opp=opportunity.has(n);
+ const n=
+ norm(name);
 
- document.getElementById("details").innerHTML=`
+ const p=
+ pop.get(n);
+
+ const v=
+ vivo.has(n);
+
+ const c=
+ claro.has(n);
+
+ const opp=
+ opportunity.has(n);
+
+ const group=
+ operationalGroup(n);
+
+ document
+ .getElementById(
+ "details"
+ )
+ .innerHTML=`
 
  <div class="row">
- <b>${name}</b>
- </div>
 
- <div class="row">
- Habitantes:
  <b>
- ${p ? p.toLocaleString("pt-BR") : "—"}
+ ${name}
  </b>
+
  </div>
 
  <div class="row">
+
+ Habitantes:
+
+ <b>
+ ${
+ p
+ ? p.toLocaleString("pt-BR")
+ : "—"
+ }
+ </b>
+
+ </div>
+
+ <div class="row">
+
  DDD:
- <b>${ddd.get(n)||"—"}</b>
+
+ <b>
+ ${
+ ddd.get(n)||
+ "—"
+ }
+ </b>
+
  </div>
 
  <div class="row">
+
+ Região operacional:
+
+ <b>
+ ${
+ group
+ ? groupLabel(group)
+ : "Fora do recorte SPI"
+ }
+ </b>
+
+ </div>
+
+ <div class="row">
+
  Vivo Fibra:
- <b>${v ? "SIM" : "NÃO"}</b>
+
+ <b>
+ ${
+ v
+ ? "SIM"
+ : "NÃO"
+ }
+ </b>
+
  </div>
 
  <div class="row">
+
  Claro Fibra:
- <b>${c ? "SIM" : "NÃO"}</b>
+
+ <b>
+ ${
+ c
+ ? "SIM"
+ : "NÃO"
+ }
+ </b>
+
  </div>
 
  <div class="row">
- Oportunidade >25 mil sem Vivo:
- <b>${opp ? "SIM" : "NÃO"}</b>
+
+ Oportunidade &gt;25 mil sem Vivo:
+
+ <b>
+ ${
+ opp
+ ? "SIM"
+ : "NÃO"
+ }
+ </b>
+
  </div>
 
  `;
+
 }
 
-document.getElementById("t1").onclick=()=>{
+document
+.getElementById(
+"t1"
+)
+.onclick=()=>{
 
- mode="vivo";
+ mode=
+ "vivo";
 
- t1.classList.add("on");
- t2.classList.remove("on");
+ t1
+ .classList
+ .add("on");
 
- document.getElementById("claroCard")
- .style.display="none";
+ t2
+ .classList
+ .remove("on");
+
+ document
+ .getElementById(
+ "claroCard"
+ )
+ .style
+ .display=
+ "none";
 
  draw();
 
- document.getElementById("status").innerHTML=
- '<span class="ok">Cobertura Vivo + oportunidade demográfica</span>';
+ document
+ .getElementById(
+ "status"
+ )
+ .innerHTML=
+ '<span class="ok">Cobertura Vivo + oportunidade demográfica + divisão DDD</span>';
 
 };
 
-document.getElementById("t2").onclick=()=>{
+document
+.getElementById(
+"t2"
+)
+.onclick=()=>{
 
- mode="claro";
+ mode=
+ "claro";
 
- t2.classList.add("on");
- t1.classList.remove("on");
+ t2
+ .classList
+ .add("on");
 
- document.getElementById("claroCard")
- .style.display="block";
+ t1
+ .classList
+ .remove("on");
+
+ document
+ .getElementById(
+ "claroCard"
+ )
+ .style
+ .display=
+ "block";
 
  draw();
 
- document.getElementById("status").innerHTML=
+ document
+ .getElementById(
+ "status"
+ )
+ .innerHTML=
  '<span class="ok">Vermelho = Claro Fibra presente e Vivo ausente</span>';
 
 };
