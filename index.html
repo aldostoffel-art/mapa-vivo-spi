@@ -87,17 +87,9 @@ svg{
     vertical-align:middle;
 }
 
-.purple{
-    background:#6d28d9;
-}
-
-.red{
-    background:#d62828;
-}
-
-.white{
-    background:#fff;
-}
+.purple{background:#6d28d9;}
+.red{background:#d62828;}
+.white{background:#fff;}
 
 .orange-border{
     background:#fff;
@@ -150,11 +142,9 @@ svg{
 }
 
 @media(max-width:850px){
-
     .grid{
         grid-template-columns:1fr;
     }
-
 }
 
 </style>
@@ -190,15 +180,9 @@ Claro x Vivo
 Carregando bases...
 </div>
 
-<svg
-id="map"
-viewBox="0 0 900 610">
-</svg>
+<svg id="map" viewBox="0 0 900 610"></svg>
 
-<div
-class="legend"
-id="legend">
-</div>
+<div class="legend" id="legend"></div>
 
 </div>
 
@@ -208,12 +192,8 @@ id="legend">
 
 <b>Município selecionado</b>
 
-<div
-id="details"
-style="margin-top:10px">
-
+<div id="details" style="margin-top:10px">
 Clique em um município.
-
 </div>
 
 </div>
@@ -240,9 +220,7 @@ DDD 12, 14, 15, 16, 17, 18, 19 + Grande Osasco + Grande Jundiaí
 BASE VIVO FIBRA INFORMADA
 </div>
 
-<div
-class="big"
-style="color:#6d28d9">
+<div class="big" style="color:#6d28d9">
 132
 </div>
 
@@ -270,9 +248,7 @@ SEM VIVO — KPI BASE
 OPORTUNIDADE DEMOGRÁFICA
 </div>
 
-<div
-class="big"
-id="oppCount">
+<div class="big" id="oppCount">
 —
 </div>
 
@@ -286,18 +262,13 @@ Borda laranja no mapa
 
 </div>
 
-<div
-class="card"
-id="claroCard"
-style="display:none">
+<div class="card" id="claroCard" style="display:none">
 
 <div class="muted">
 CLARO PRESENTE / VIVO AUSENTE
 </div>
 
-<div
-class="big"
-id="claroOpp">
+<div class="big" id="claroOpp">
 —
 </div>
 
@@ -355,18 +326,28 @@ Malha municipal: base geográfica municipal
 <script>
 
 /* =====================================================
-   NORMALIZAÇÃO
+   NORMALIZAÇÃO + CORREÇÃO DE NOMES
 ===================================================== */
 
 function norm(s){
 
-    return String(s || "")
+    let n = String(s || "")
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g,"")
     .toUpperCase()
     .replace(/[^A-Z0-9 ]/g," ")
     .replace(/\s+/g," ")
     .trim();
+
+    const aliases = {
+
+        "MOJI MIRIM":"MOGI MIRIM",
+
+        "MOJI GUACU":"MOGI GUACU"
+
+    };
+
+    return aliases[n] || n;
 
 }
 
@@ -824,8 +805,6 @@ Promise.allSettled([
 .then(results=>{
 
 
-    /* GEO */
-
     if(
         results[0].status!=="fulfilled"
     ){
@@ -835,6 +814,7 @@ Promise.allSettled([
         );
 
     }
+
 
     geo=
     results[0].value;
@@ -1151,8 +1131,6 @@ Promise.allSettled([
     claroSemVivo.size;
 
 
-    /* PROJEÇÃO */
-
     projection=
     d3
     .geoMercator()
@@ -1265,7 +1243,6 @@ function groupLabel(g){
 
 /* =====================================================
    CORES
-   CORRIGIDO
 ===================================================== */
 
 function fillColor(n){
@@ -1521,12 +1498,6 @@ function drawDDDContours(svg){
 
             };
 
-
-            /*
-            TopoJSON Server pode estar exposto
-            como topojsonServer ou topojson
-            dependendo do carregamento.
-            */
 
             const server=
             window.topojsonServer
@@ -2057,4 +2028,4 @@ document
 </script>
 
 </body>
-    </html>
+</html>
