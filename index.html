@@ -138,25 +138,14 @@ svg{
     font-weight:bold;
 }
 
-.warning{
-    color:#b45309;
-    font-weight:bold;
-}
-
 .ddd-label{
-
     font-size:13px;
     font-weight:800;
-
     fill:#111827;
-
     paint-order:stroke;
-
     stroke:#fff;
     stroke-width:4px;
-
     stroke-linejoin:round;
-
     pointer-events:none;
 }
 
@@ -175,9 +164,7 @@ svg{
 
 <div class="wrap">
 
-<h1>
-INTELIGÊNCIA DE FIBRA — SPI
-</h1>
+<h1>INTELIGÊNCIA DE FIBRA — SPI</h1>
 
 <div class="sub">
 Cobertura Vivo • Claro x Vivo • População • Renda • Oportunidade • Divisão por DDD
@@ -185,15 +172,11 @@ Cobertura Vivo • Claro x Vivo • População • Renda • Oportunidade • D
 
 <div class="tabs">
 
-<button
-class="tab on"
-id="t1">
+<button class="tab on" id="t1">
 Cobertura Vivo
 </button>
 
-<button
-class="tab"
-id="t2">
+<button class="tab" id="t2">
 Claro x Vivo
 </button>
 
@@ -219,14 +202,11 @@ id="legend">
 
 </div>
 
-
 <aside>
 
 <div class="card">
 
-<b>
-Município selecionado
-</b>
+<b>Município selecionado</b>
 
 <div
 id="details"
@@ -237,7 +217,6 @@ Clique em um município.
 </div>
 
 </div>
-
 
 <div class="card">
 
@@ -255,7 +234,6 @@ DDD 12, 14, 15, 16, 17, 18, 19 + Grande Osasco + Grande Jundiaí
 
 </div>
 
-
 <div class="card">
 
 <div class="muted">
@@ -265,17 +243,12 @@ BASE VIVO FIBRA INFORMADA
 <div
 class="big"
 style="color:#6d28d9">
-
 132
-
 </div>
 
-<b>
-23,0%
-</b>
+<b>23,0%</b>
 
 </div>
-
 
 <div class="card">
 
@@ -287,12 +260,9 @@ SEM VIVO — KPI BASE
 442
 </div>
 
-<b>
-77,0%
-</b>
+<b>77,0%</b>
 
 </div>
-
 
 <div class="card">
 
@@ -303,9 +273,7 @@ OPORTUNIDADE DEMOGRÁFICA
 <div
 class="big"
 id="oppCount">
-
 —
-
 </div>
 
 <b>
@@ -317,7 +285,6 @@ Borda laranja no mapa
 </div>
 
 </div>
-
 
 <div
 class="card"
@@ -331,9 +298,7 @@ CLARO PRESENTE / VIVO AUSENTE
 <div
 class="big"
 id="claroOpp">
-
 —
-
 </div>
 
 <b>
@@ -346,12 +311,9 @@ municípios dentro do recorte SPI
 
 </div>
 
-
 <div class="card">
 
-<b>
-Divisão operacional
-</b>
+<b>Divisão operacional</b>
 
 <div class="muted">
 
@@ -369,24 +331,17 @@ DDD 19
 
 </div>
 
-
 <div class="card">
 
-<b>
-Fontes
-</b>
+<b>Fontes</b>
 
 <div class="muted">
 
 Vivo: base operacional informada<br>
-
 Claro: relação municipal de cidades com Claro Fibra<br>
-
 População: Censo 2022 / IBGE<br>
-
 Renda domiciliar per capita: Censo 2022 / IBGE<br>
-
-Malha municipal: base geográfica municipal baseada no IBGE
+Malha municipal: base geográfica municipal
 
 </div>
 
@@ -397,7 +352,6 @@ Malha municipal: base geográfica municipal baseada no IBGE
 </div>
 </div>
 
-
 <script>
 
 /* =====================================================
@@ -407,37 +361,21 @@ Malha municipal: base geográfica municipal baseada no IBGE
 function norm(s){
 
     return String(s || "")
-
     .normalize("NFD")
-
-    .replace(
-        /[\u0300-\u036f]/g,
-        ""
-    )
-
+    .replace(/[\u0300-\u036f]/g,"")
     .toUpperCase()
-
-    .replace(
-        /[^A-Z0-9 ]/g,
-        " "
-    )
-
-    .replace(
-        /\s+/g,
-        " "
-    )
-
+    .replace(/[^A-Z0-9 ]/g," ")
+    .replace(/\s+/g," ")
     .trim();
 
 }
 
 
 /* =====================================================
-   VIVO
-   EXATAMENTE A BASE INFORMADA
+   BASE VIVO
 ===================================================== */
 
-const vivoRaw = `
+const vivoRaw=`
 
 ADAMANTINA|
 AMERICANA|
@@ -574,31 +512,23 @@ VOTUPORANGA
 
 `;
 
-const vivo =
+const vivo=
 new Set(
 
     vivoRaw
-
-    .replace(
-        /\n/g,
-        ""
-    )
-
+    .replace(/\n/g,"")
     .split("|")
-
     .map(norm)
-
     .filter(Boolean)
 
 );
 
 
 /* =====================================================
-   CLARO
-   LISTA COMPLETA RESTAURADA
+   BASE CLARO COMPLETA
 ===================================================== */
 
-const claroRaw = `
+const claroRaw=`
 
 ARACATUBA|
 GUARARAPES|
@@ -782,20 +712,13 @@ BERTIOGA
 
 `;
 
-const claro =
+const claro=
 new Set(
 
     claroRaw
-
-    .replace(
-        /\n/g,
-        ""
-    )
-
+    .replace(/\n/g,"")
     .split("|")
-
     .map(norm)
-
     .filter(Boolean)
 
 );
@@ -805,96 +728,63 @@ new Set(
    VARIÁVEIS
 ===================================================== */
 
-let geo = null;
+let geo=null;
+let projection=null;
+let path=null;
 
-let projection = null;
+let mode="vivo";
 
-let path = null;
+let pop=new Map();
+let renda=new Map();
+let ddd=new Map();
 
-let mode = "vivo";
-
-let pop =
-new Map();
-
-let renda =
-new Map();
-
-let ddd =
-new Map();
-
-let spiNames =
-new Set();
-
-let opportunity =
-new Set();
-
-let claroSemVivo =
-new Set();
+let spiNames=new Set();
+let opportunity=new Set();
+let claroSemVivo=new Set();
 
 
 /* =====================================================
    RECORTE DDD 11
 ===================================================== */
 
-const jundiai =
+const jundiai=
 new Set([
 
     "CABREUVA",
-
     "CAMPO LIMPO PAULISTA",
-
     "ITUPEVA",
-
     "JARINU",
-
     "JUNDIAI",
-
     "LOUVEIRA",
-
     "VARZEA PAULISTA"
 
 ]);
 
 
-const osasco =
+const osasco=
 new Set([
 
     "OSASCO",
-
     "BARUERI",
-
     "CARAPICUIBA",
-
     "COTIA",
-
     "ITAPEVI",
-
     "JANDIRA",
-
     "PIRAPORA DO BOM JESUS",
-
     "SANTANA DE PARNAIBA"
 
 ]);
 
 
-const dddsSPI =
+const dddsSPI=
 new Set([
-
     12,
-
     14,
-
     15,
-
     16,
-
     17,
-
     18,
-
     19
-
 ]);
 
 
@@ -902,19 +792,16 @@ new Set([
    FONTES
 ===================================================== */
 
-const geoUrl =
+const geoUrl=
 "https://raw.githubusercontent.com/tbrugz/geodata-br/refs/heads/master/geojson/geojs-35-mun.json";
 
-
-const munUrl =
+const munUrl=
 "https://raw.githubusercontent.com/kelvins/Municipios-Brasileiros/main/json/municipios.json";
 
-
-const popUrl =
+const popUrl=
 "https://servicodados.ibge.gov.br/api/v3/agregados/4714/periodos/2022/variaveis/93?localidades=N6%5BN3%5B35%5D%5D";
 
-
-const rendaUrl =
+const rendaUrl=
 "https://servicodados.ibge.gov.br/api/v3/agregados/10295/periodos/2022/variaveis?localidades=N6%5BN3%5B35%5D%5D";
 
 
@@ -924,49 +811,23 @@ const rendaUrl =
 
 Promise.allSettled([
 
-    fetch(
-        geoUrl
-    )
-    .then(
-        r => r.json()
-    ),
+    fetch(geoUrl).then(r=>r.json()),
 
+    fetch(munUrl).then(r=>r.json()),
 
-    fetch(
-        munUrl
-    )
-    .then(
-        r => r.json()
-    ),
+    fetch(popUrl).then(r=>r.json()),
 
-
-    fetch(
-        popUrl
-    )
-    .then(
-        r => r.json()
-    ),
-
-
-    fetch(
-        rendaUrl
-    )
-    .then(
-        r => r.json()
-    )
+    fetch(rendaUrl).then(r=>r.json())
 
 ])
 
-.then(results => {
+.then(results=>{
 
 
-    /* -------------------------------------------
-       GEO
-    -------------------------------------------- */
+    /* GEO */
 
     if(
-        results[0].status !==
-        "fulfilled"
+        results[0].status!=="fulfilled"
     ){
 
         throw new Error(
@@ -975,18 +836,15 @@ Promise.allSettled([
 
     }
 
-    geo =
+    geo=
     results[0].value;
 
 
-    /* -------------------------------------------
-       DDD
-    -------------------------------------------- */
+    /* DDD */
 
-    const ms =
+    const ms=
 
-    results[1].status ===
-    "fulfilled"
+    results[1].status==="fulfilled"
 
     ?
 
@@ -1000,25 +858,19 @@ Promise.allSettled([
     ms
 
     .filter(
-        x =>
-        Number(
-            x.codigo_uf
-        ) === 35
+        x=>
+        Number(x.codigo_uf)===35
     )
 
-    .forEach(x => {
+    .forEach(x=>{
 
 
-        const n =
-        norm(
-            x.nome
-        );
+        const n=
+        norm(x.nome);
 
 
-        const d =
-        Number(
-            x.ddd
-        );
+        const d=
+        Number(x.ddd);
 
 
         ddd.set(
@@ -1049,16 +901,13 @@ Promise.allSettled([
     });
 
 
-    /* -------------------------------------------
-       POPULAÇÃO
-    -------------------------------------------- */
+    /* POPULAÇÃO */
 
     if(
-        results[2].status ===
-        "fulfilled"
+        results[2].status==="fulfilled"
     ){
 
-        const pd =
+        const pd=
         results[2].value;
 
 
@@ -1070,47 +919,35 @@ Promise.allSettled([
             []
         )
 
-        .forEach(s => {
+        .forEach(s=>{
 
 
-            const n =
+            const n=
             norm(
 
                 (
-                    s.localidade
-                    ?.nome
+                    s.localidade?.nome
                     ||
                     ""
                 )
 
                 .replace(
-
                     /\s*-\s*SP\s*$/i,
-
                     ""
-
                 )
 
             );
 
 
-            const v =
+            const v=
             Number(
-
-                s.serie
-                ?.["2022"]
-
+                s.serie?.["2022"]
             );
 
 
             if(
-
-                n
-
-                &&
-
+                n &&
                 Number.isFinite(v)
-
             ){
 
                 pop.set(
@@ -1126,76 +963,60 @@ Promise.allSettled([
     }
 
 
-    /* -------------------------------------------
-       RENDA
-    -------------------------------------------- */
+    /* RENDA */
 
     if(
-        results[3].status ===
-        "fulfilled"
+        results[3].status==="fulfilled"
     ){
 
         try{
 
 
-            const rd =
+            const rd=
             results[3].value;
 
 
-            let bloco =
-            null;
+            let bloco=null;
 
 
             for(
-                const item
-                of
-                rd || []
+                const item of rd||[]
             ){
 
 
-                const variavel =
+                const variavel=
                 norm(
-                    item.variavel
-                    ||
-                    ""
+                    item.variavel||""
                 );
 
 
                 if(
 
-                    variavel.includes(
-                        "RENDIMENTO"
-                    )
+                    variavel.includes("RENDIMENTO")
 
                     &&
 
-                    variavel.includes(
-                        "DOMICILIAR"
-                    )
+                    variavel.includes("DOMICILIAR")
 
                     &&
 
-                    variavel.includes(
-                        "PER CAPITA"
-                    )
+                    variavel.includes("PER CAPITA")
 
                 ){
 
-                    bloco =
-                    item;
+                    bloco=item;
 
                     break;
 
                 }
 
+
             }
 
 
-            if(
-                !bloco
-            ){
+            if(!bloco){
 
-                bloco =
+                bloco=
                 rd?.[0];
 
             }
@@ -1207,9 +1028,7 @@ Promise.allSettled([
                 []
             )
 
-            .forEach(
-                resultado =>
-            {
+            .forEach(resultado=>{
 
 
                 (
@@ -1218,36 +1037,29 @@ Promise.allSettled([
                     []
                 )
 
-                .forEach(s => {
+                .forEach(s=>{
 
 
-                    const n =
+                    const n=
                     norm(
 
                         (
-                            s.localidade
-                            ?.nome
+                            s.localidade?.nome
                             ||
                             ""
                         )
 
                         .replace(
-
                             /\s*-\s*SP\s*$/i,
-
                             ""
-
                         )
 
                     );
 
 
-                    const valor =
+                    const valor=
                     Number(
-
-                        s.serie
-                        ?.["2022"]
-
+                        s.serie?.["2022"]
                     );
 
 
@@ -1257,9 +1069,7 @@ Promise.allSettled([
 
                         &&
 
-                        Number.isFinite(
-                            valor
-                        )
+                        Number.isFinite(valor)
 
                     ){
 
@@ -1291,40 +1101,32 @@ Promise.allSettled([
     }
 
 
-    /* -------------------------------------------
-       OPORTUNIDADES
-    -------------------------------------------- */
+    /* OPORTUNIDADES */
 
-    opportunity =
+    opportunity=
     new Set(
 
         [...spiNames]
 
-        .filter(n =>
+        .filter(n=>
 
             !vivo.has(n)
 
             &&
 
-            (
-                pop.get(n)
-                ||
-                0
-            )
-            >
-            25000
+            (pop.get(n)||0)>25000
 
         )
 
     );
 
 
-    claroSemVivo =
+    claroSemVivo=
     new Set(
 
         [...spiNames]
 
-        .filter(n =>
+        .filter(n=>
 
             claro.has(n)
 
@@ -1338,48 +1140,32 @@ Promise.allSettled([
 
 
     document
-
-    .getElementById(
-        "oppCount"
-    )
-
-    .textContent =
+    .getElementById("oppCount")
+    .textContent=
     opportunity.size;
 
 
     document
-
-    .getElementById(
-        "claroOpp"
-    )
-
-    .textContent =
+    .getElementById("claroOpp")
+    .textContent=
     claroSemVivo.size;
 
 
-    /* -------------------------------------------
-       PROJEÇÃO
-    -------------------------------------------- */
+    /* PROJEÇÃO */
 
-    projection =
-
+    projection=
     d3
-
     .geoMercator()
-
     .fitExtent(
-
         [
             [15,15],
             [885,595]
         ],
-
         geo
-
     );
 
 
-    path =
+    path=
     d3.geoPath(
         projection
     );
@@ -1389,15 +1175,19 @@ Promise.allSettled([
 
 
     document
-
-    .getElementById(
-        "status"
-    )
-
-    .innerHTML =
-
+    .getElementById("status")
+    .innerHTML=
     '<span class="ok">Mapa carregado — clique em um município</span>';
 
+
+})
+
+.catch(err=>{
+
+    document
+    .getElementById("status")
+    .textContent=
+    "Erro: "+err.message;
 
 });
 
@@ -1427,7 +1217,7 @@ function operationalGroup(n){
     }
 
 
-    const d =
+    const d=
     Number(
         ddd.get(n)
     );
@@ -1447,16 +1237,11 @@ function operationalGroup(n){
 }
 
 
-/* =====================================================
-   LABEL
-===================================================== */
-
 function groupLabel(g){
 
 
     if(
-        g ===
-        "11-OSASCO"
+        g==="11-OSASCO"
     ){
 
         return "DDD 11 • Osasco";
@@ -1465,8 +1250,7 @@ function groupLabel(g){
 
 
     if(
-        g ===
-        "11-JUNDIAI"
+        g==="11-JUNDIAI"
     ){
 
         return "DDD 11 • Jundiaí";
@@ -1474,37 +1258,25 @@ function groupLabel(g){
     }
 
 
-    return "DDD " + g;
+    return "DDD "+g;
 
 }
 
 
 /* =====================================================
-   COR
+   CORES
+   CORRIGIDO
 ===================================================== */
 
 function fillColor(n){
 
+    if(mode==="vivo"){
 
-    if(
-        mode ===
-        "vivo"
-    ){
-
-        return
-
-        vivo.has(n)
-
-        ?
-
-        "#6d28d9"
-
-        :
-
-        "#ffffff";
+        return vivo.has(n)
+            ? "#6d28d9"
+            : "#ffffff";
 
     }
-
 
     if(
         claroSemVivo.has(n)
@@ -1514,7 +1286,6 @@ function fillColor(n){
 
     }
 
-
     if(
         vivo.has(n)
     ){
@@ -1522,7 +1293,6 @@ function fillColor(n){
         return "#6d28d9";
 
     }
-
 
     return "#ffffff";
 
@@ -1538,8 +1308,7 @@ function strokeColor(n){
 
     if(
 
-        mode ===
-        "vivo"
+        mode==="vivo"
 
         &&
 
@@ -1562,8 +1331,7 @@ function strokeWidth(n){
 
     if(
 
-        mode ===
-        "vivo"
+        mode==="vivo"
 
         &&
 
@@ -1588,26 +1356,17 @@ function strokeWidth(n){
 function draw(){
 
 
-    const svg =
-    d3.select(
-        "#map"
-    );
+    const svg=
+    d3.select("#map");
 
 
     svg
-
     .selectAll("*")
-
     .remove();
 
 
-    /* MUNICÍPIOS */
-
-
     svg
-
     .append("g")
-
     .attr(
         "class",
         "municipios"
@@ -1628,37 +1387,31 @@ function draw(){
 
     .attr(
         "fill",
-        d =>
+        d=>
         fillColor(
-
             norm(
                 d.properties.name
             )
-
         )
     )
 
     .attr(
         "stroke",
-        d =>
+        d=>
         strokeColor(
-
             norm(
                 d.properties.name
             )
-
         )
     )
 
     .attr(
         "stroke-width",
-        d =>
+        d=>
         strokeWidth(
-
             norm(
                 d.properties.name
             )
-
         )
     )
 
@@ -1669,10 +1422,7 @@ function draw(){
 
     .on(
         "click",
-        function(
-            event,
-            d
-        ){
+        function(event,d){
 
             show(
                 d.properties.name
@@ -1693,22 +1443,22 @@ function draw(){
 
 
 /* =====================================================
-   CONTORNO DDD
+   CONTORNOS DDD
 ===================================================== */
 
 function drawDDDContours(svg){
 
 
-    const grupos =
+    const grupos=
     new Map();
 
 
     geo.features
 
-    .forEach(f => {
+    .forEach(f=>{
 
 
-        const n =
+        const n=
         norm(
             f.properties.name
         );
@@ -1723,13 +1473,11 @@ function drawDDDContours(svg){
         }
 
 
-        const g =
+        const g=
         operationalGroup(n);
 
 
-        if(
-            !g
-        ){
+        if(!g){
 
             return;
 
@@ -1749,9 +1497,7 @@ function drawDDDContours(svg){
 
 
         grupos
-
         .get(g)
-
         .push(f);
 
 
@@ -1761,53 +1507,76 @@ function drawDDDContours(svg){
     grupos
 
     .forEach(
-
-        (
-            features,
-            g
-        ) =>
-    {
+        (features,g)=>{
 
 
         try{
 
 
-            const fc = {
+            const fc={
 
-                type:
-                "FeatureCollection",
+                type:"FeatureCollection",
 
-                features:
-                features
+                features:features
 
             };
 
 
-            const topology =
+            /*
+            TopoJSON Server pode estar exposto
+            como topojsonServer ou topojson
+            dependendo do carregamento.
+            */
 
-            topojsonServer
+            const server=
+            window.topojsonServer
+            ||
+            window.topojson;
 
-            .topology({
 
-                municipios:
-                fc
+            if(
+                !server
+                ||
+                typeof server.topology!=="function"
+            ){
+
+                return;
+
+            }
+
+
+            const topology=
+            server.topology({
+
+                municipios:fc
 
             });
 
 
-            const geometries =
+            const client=
+            window.topojson;
 
+
+            if(
+                !client
+                ||
+                typeof client.merge!=="function"
+            ){
+
+                return;
+
+            }
+
+
+            const geometries=
             topology
             .objects
             .municipios
             .geometries;
 
 
-            const merged =
-
-            topojson
-
-            .merge(
+            const merged=
+            client.merge(
 
                 topology,
 
@@ -1855,7 +1624,7 @@ function drawDDDContours(svg){
             );
 
 
-            const centroid =
+            const centroid=
             path.centroid(
                 merged
             );
@@ -1912,23 +1681,16 @@ function drawDDDContours(svg){
 
         catch(err){
 
-
             console.warn(
-
-                "Falha ao desenhar DDD",
-
+                "Falha DDD",
                 g,
-
                 err
-
             );
-
 
         }
 
 
     });
-
 
 }
 
@@ -1940,7 +1702,7 @@ function drawDDDContours(svg){
 function legend(){
 
 
-    const alvo =
+    const alvo=
     document
     .getElementById(
         "legend"
@@ -1948,12 +1710,11 @@ function legend(){
 
 
     if(
-        mode ===
-        "vivo"
+        mode==="vivo"
     ){
 
 
-        alvo.innerHTML = `
+        alvo.innerHTML=`
 
         <span>
         <i class="sw purple"></i>
@@ -1983,7 +1744,7 @@ function legend(){
     else{
 
 
-        alvo.innerHTML = `
+        alvo.innerHTML=`
 
         <span>
         <i class="sw red"></i>
@@ -2010,47 +1771,45 @@ function legend(){
 
     }
 
-
 }
 
 
 /* =====================================================
-   MUNICÍPIO
+   PAINEL MUNICIPAL
 ===================================================== */
 
 function show(name){
 
 
-    const n =
+    const n=
     norm(name);
 
 
-    const p =
+    const p=
     pop.get(n);
 
 
-    const r =
+    const r=
     renda.get(n);
 
 
-    const v =
+    const v=
     vivo.has(n);
 
 
-    const c =
+    const c=
     claro.has(n);
 
 
-    const opp =
+    const opp=
     opportunity.has(n);
 
 
-    const group =
+    const group=
     operationalGroup(n);
 
 
-    let rendaTexto =
-    "—";
+    let rendaTexto="—";
 
 
     if(
@@ -2059,12 +1818,12 @@ function show(name){
 
         &&
 
-        r > 0
+        r>0
 
     ){
 
 
-        rendaTexto =
+        rendaTexto=
 
         r.toLocaleString(
 
@@ -2072,14 +1831,11 @@ function show(name){
 
             {
 
-                style:
-                "currency",
+                style:"currency",
 
-                currency:
-                "BRL",
+                currency:"BRL",
 
-                maximumFractionDigits:
-                0
+                maximumFractionDigits:0
 
             }
 
@@ -2094,105 +1850,63 @@ function show(name){
 
 
     document
-
     .getElementById(
         "details"
     )
 
-    .innerHTML = `
-
+    .innerHTML=`
 
     <div class="row">
-
-    <b>
-    ${name}
-    </b>
-
+    <b>${name}</b>
     </div>
 
-
     <div class="row">
-
     Habitantes:
-
     <b>
-
     ${
         p
-
         ?
-
-        p.toLocaleString(
-            "pt-BR"
-        )
-
+        p.toLocaleString("pt-BR")
         :
-
         "—"
     }
-
     </b>
-
     </div>
 
-
     <div class="row">
-
     Renda domiciliar per capita:
-
     <b>
     ${rendaTexto}
     </b>
-
     </div>
 
-
     <div class="row">
-
     DDD:
-
     <b>
-
     ${
         ddd.get(n)
         ||
         "—"
     }
-
     </b>
-
     </div>
 
-
     <div class="row">
-
     Região operacional:
-
     <b>
-
     ${
         group
-
         ?
-
         groupLabel(group)
-
         :
-
         "Fora do recorte SPI"
     }
-
     </b>
-
     </div>
 
-
     <div class="row">
-
     Vivo Fibra:
-
     <b>
-
     ${
         v
         ?
@@ -2200,18 +1914,12 @@ function show(name){
         :
         "NÃO"
     }
-
     </b>
-
     </div>
 
-
     <div class="row">
-
     Claro Fibra:
-
     <b>
-
     ${
         c
         ?
@@ -2219,18 +1927,12 @@ function show(name){
         :
         "NÃO"
     }
-
     </b>
-
     </div>
 
-
     <div class="row">
-
     Claro presente e Vivo ausente:
-
     <b>
-
     ${
         c && !v
         ?
@@ -2238,18 +1940,12 @@ function show(name){
         :
         "NÃO"
     }
-
     </b>
-
     </div>
 
-
     <div class="row">
-
     Oportunidade &gt;25 mil sem Vivo:
-
     <b>
-
     ${
         opp
         ?
@@ -2257,147 +1953,108 @@ function show(name){
         :
         "NÃO"
     }
-
     </b>
-
     </div>
 
-
     `;
-
 
 }
 
 
 /* =====================================================
-   BOTÃO VIVO
+   ABA VIVO
 ===================================================== */
 
 document
-
 .getElementById(
     "t1"
 )
-
-.onclick =
-() => {
+.onclick=()=>{
 
 
-    mode =
-    "vivo";
-
-
-    t1
-
-    .classList
-
-    .add(
-        "on"
-    );
-
-
-    t2
-
-    .classList
-
-    .remove(
-        "on"
-    );
+    mode="vivo";
 
 
     document
+    .getElementById("t1")
+    .classList
+    .add("on");
 
+
+    document
+    .getElementById("t2")
+    .classList
+    .remove("on");
+
+
+    document
     .getElementById(
         "claroCard"
     )
-
     .style
-    .display =
-    "none";
+    .display="none";
 
 
     draw();
 
 
     document
-
     .getElementById(
         "status"
     )
-
-    .innerHTML =
-
+    .innerHTML=
     '<span class="ok">Cobertura Vivo + oportunidades &gt;25 mil habitantes</span>';
-
 
 };
 
 
 /* =====================================================
-   BOTÃO CLARO
+   ABA CLARO
 ===================================================== */
 
 document
-
 .getElementById(
     "t2"
 )
-
-.onclick =
-() => {
+.onclick=()=>{
 
 
-    mode =
-    "claro";
-
-
-    t2
-
-    .classList
-
-    .add(
-        "on"
-    );
-
-
-    t1
-
-    .classList
-
-    .remove(
-        "on"
-    );
+    mode="claro";
 
 
     document
+    .getElementById("t2")
+    .classList
+    .add("on");
 
+
+    document
+    .getElementById("t1")
+    .classList
+    .remove("on");
+
+
+    document
     .getElementById(
         "claroCard"
     )
-
     .style
-    .display =
-    "block";
+    .display="block";
 
 
     draw();
 
 
     document
-
     .getElementById(
         "status"
     )
-
-    .innerHTML =
-
+    .innerHTML=
     '<span class="ok">Vermelho = Claro presente e Vivo ausente</span>';
-
 
 };
 
 </script>
 
 </body>
-
-</html>
+    </html>
