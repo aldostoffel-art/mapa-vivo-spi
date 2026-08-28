@@ -203,17 +203,9 @@ svg{
     vertical-align:middle;
 }
 
-.purple{
-    background:#6d28d9;
-}
-
-.red{
-    background:#d62828;
-}
-
-.white{
-    background:#fff;
-}
+.purple{background:#6d28d9;}
+.red{background:#d62828;}
+.white{background:#fff;}
 
 .orange-border{
     background:#fff;
@@ -222,7 +214,7 @@ svg{
 
 .ddd-line{
     background:#fff;
-    border:2px solid #374151;
+    border:2px solid #111827;
 }
 
 .legend{
@@ -260,12 +252,12 @@ svg{
 }
 
 .ddd-label{
-    font-size:12px;
-    font-weight:800;
+    font-size:13px;
+    font-weight:900;
     fill:#111827;
     paint-order:stroke;
-    stroke:#fff;
-    stroke-width:4px;
+    stroke:#ffffff;
+    stroke-width:5px;
     stroke-linejoin:round;
     pointer-events:none;
 }
@@ -323,7 +315,6 @@ svg{
 
     .ddd-summary-items{
         grid-template-columns:repeat(3,1fr);
-        gap:4px;
     }
 
 }
@@ -386,10 +377,6 @@ Claro x Vivo
 
 </div>
 
-<!-- =====================================================
-     KPIs
-===================================================== -->
-
 <div class="kpi-strip">
 
 <div class="kpi-card">
@@ -399,7 +386,7 @@ Total de municípios — Universo SPI
 </div>
 
 <div class="kpi-value" id="kpiUniverso">
-—
+574
 </div>
 
 <div class="kpi-desc">
@@ -415,11 +402,11 @@ Municípios com Vivo Fibra
 </div>
 
 <div class="kpi-value vivo-color" id="kpiVivo">
-—
+132
 </div>
 
 <div class="kpi-desc" id="kpiVivoPct">
-—
+23,0% do universo
 </div>
 
 </div>
@@ -431,11 +418,11 @@ Municípios sem Vivo Fibra
 </div>
 
 <div class="kpi-value" id="kpiSemVivo">
-—
+442
 </div>
 
 <div class="kpi-desc" id="kpiSemVivoPct">
-—
+77,0% do universo
 </div>
 
 </div>
@@ -458,9 +445,6 @@ Aguardando população IBGE
 
 </div>
 
-<!-- =====================================================
-     SEM VIVO POR DDD
-===================================================== -->
 
 <div class="ddd-summary">
 
@@ -474,16 +458,13 @@ Carregando divisão operacional...
 
 </div>
 
-<!-- =====================================================
-     MAPA
-===================================================== -->
 
 <div class="grid">
 
 <div class="card">
 
 <div id="status">
-Carregando mapa e divisão operacional...
+Carregando mapa...
 </div>
 
 <svg id="map" viewBox="0 0 900 610"></svg>
@@ -501,9 +482,7 @@ Município selecionado
 </div>
 
 <div id="details" style="margin-top:8px">
-
 Clique em um município para consultar população, renda, DDD e cobertura.
-
 </div>
 
 </div>
@@ -530,9 +509,7 @@ municípios dentro do recorte SPI
 
 <div class="card">
 
-<b>
-Divisão operacional
-</b>
+<b>Divisão operacional</b>
 
 <div class="muted" style="margin-top:6px">
 
@@ -547,9 +524,7 @@ DDD 16 • DDD 17 • DDD 18 • DDD 19
 
 <div class="card">
 
-<b>
-Fontes
-</b>
+<b>Fontes</b>
 
 <div class="muted" style="margin-top:6px">
 
@@ -566,10 +541,19 @@ Malha municipal: base geográfica municipal
 </aside>
 
 </div>
-
 </div>
 
 <script>
+
+/* =====================================================
+   REFERÊNCIAS OFICIAIS SPI
+===================================================== */
+
+const UNIVERSO_SPI_OFICIAL = 574;
+const VIVO_SPI_OFICIAL = 132;
+const SEM_VIVO_SPI_OFICIAL =
+    UNIVERSO_SPI_OFICIAL - VIVO_SPI_OFICIAL;
+
 
 /* =====================================================
    NORMALIZAÇÃO
@@ -585,7 +569,7 @@ function norm(s){
         .replace(/\s+/g," ")
         .trim();
 
-    const aliases = {
+    const aliases={
         "MOJI MIRIM":"MOGI MIRIM",
         "MOJI GUACU":"MOGI GUACU"
     };
@@ -739,10 +723,10 @@ VOTUPORANGA
 const vivo=
 new Set(
     vivoRaw
-        .replace(/\n/g,"")
-        .split("|")
-        .map(norm)
-        .filter(Boolean)
+    .replace(/\n/g,"")
+    .split("|")
+    .map(norm)
+    .filter(Boolean)
 );
 
 
@@ -937,10 +921,10 @@ BERTIOGA
 const claro=
 new Set(
     claroRaw
-        .replace(/\n/g,"")
-        .split("|")
-        .map(norm)
-        .filter(Boolean)
+    .replace(/\n/g,"")
+    .split("|")
+    .map(norm)
+    .filter(Boolean)
 );
 
 
@@ -1107,52 +1091,30 @@ function calcularOportunidades(){
 
 
 /* =====================================================
-   KPIs
+   KPIs OFICIAIS
 ===================================================== */
 
 function updateKpis(){
 
-    const universo=
-    spiNames.size;
-
-    const vivoSPI=
-    [...spiNames]
-    .filter(
-        n=>vivo.has(n)
-    )
-    .length;
-
-    const semVivo=
-    universo-vivoSPI;
-
-    const pctVivo=
-    universo
-    ?
-    (vivoSPI/universo)*100
-    :
-    0;
-
-    const pctSemVivo=
-    universo
-    ?
-    (semVivo/universo)*100
-    :
-    0;
-
     document
     .getElementById("kpiUniverso")
     .textContent=
-    universo.toLocaleString("pt-BR");
+    UNIVERSO_SPI_OFICIAL;
 
     document
     .getElementById("kpiVivo")
     .textContent=
-    vivoSPI.toLocaleString("pt-BR");
+    VIVO_SPI_OFICIAL;
 
     document
     .getElementById("kpiVivoPct")
     .textContent=
-    pctVivo.toLocaleString(
+    (
+        VIVO_SPI_OFICIAL /
+        UNIVERSO_SPI_OFICIAL *
+        100
+    )
+    .toLocaleString(
         "pt-BR",
         {
             minimumFractionDigits:1,
@@ -1164,12 +1126,17 @@ function updateKpis(){
     document
     .getElementById("kpiSemVivo")
     .textContent=
-    semVivo.toLocaleString("pt-BR");
+    SEM_VIVO_SPI_OFICIAL;
 
     document
     .getElementById("kpiSemVivoPct")
     .textContent=
-    pctSemVivo.toLocaleString(
+    (
+        SEM_VIVO_SPI_OFICIAL /
+        UNIVERSO_SPI_OFICIAL *
+        100
+    )
+    .toLocaleString(
         "pt-BR",
         {
             minimumFractionDigits:1,
@@ -1181,22 +1148,20 @@ function updateKpis(){
 
     if(pop.size>0){
 
-        const pctOpportunity=
-        universo
-        ?
-        (opportunity.size/universo)*100
-        :
-        0;
-
         document
         .getElementById("kpiOpportunity")
         .textContent=
-        opportunity.size.toLocaleString("pt-BR");
+        opportunity.size;
 
         document
         .getElementById("kpiOpportunityPct")
         .textContent=
-        pctOpportunity.toLocaleString(
+        (
+            opportunity.size /
+            UNIVERSO_SPI_OFICIAL *
+            100
+        )
+        .toLocaleString(
             "pt-BR",
             {
                 minimumFractionDigits:1,
@@ -1211,7 +1176,7 @@ function updateKpis(){
     document
     .getElementById("claroOpp")
     .textContent=
-    claroSemVivo.size.toLocaleString("pt-BR");
+    claroSemVivo.size;
 
 
     updateDDD();
@@ -1240,17 +1205,18 @@ function updateDDD(){
     const resumo=
     new Map();
 
-    ordem.forEach(
-        g=>
+    ordem.forEach(g=>{
+
         resumo.set(
             g,
             {
                 total:0,
-                vivo:0,
+                comVivo:0,
                 semVivo:0
             }
-        )
-    );
+        );
+
+    });
 
 
     [...spiNames]
@@ -1273,7 +1239,7 @@ function updateDDD(){
         item.total++;
 
         if(vivo.has(n)){
-            item.vivo++;
+            item.comVivo++;
         }
         else{
             item.semVivo++;
@@ -1300,11 +1266,19 @@ function updateDDD(){
         }
 
         return `
-            <div class="ddd-mini-card">
-                ${label}
-                <strong>${item.semVivo}</strong>
-                sem Vivo
-            </div>
+
+        <div class="ddd-mini-card">
+
+            ${label}
+
+            <strong>
+            ${item.semVivo}
+            </strong>
+
+            sem Vivo
+
+        </div>
+
         `;
 
     })
@@ -1408,20 +1382,15 @@ function draw(){
         "class",
         "municipios"
     )
-
     .selectAll("path")
-
     .data(
         geo.features
     )
-
     .join("path")
-
     .attr(
         "d",
         path
     )
-
     .attr(
         "fill",
         d=>
@@ -1431,7 +1400,6 @@ function draw(){
             )
         )
     )
-
     .attr(
         "stroke",
         d=>
@@ -1441,7 +1409,6 @@ function draw(){
             )
         )
     )
-
     .attr(
         "stroke-width",
         d=>
@@ -1451,12 +1418,10 @@ function draw(){
             )
         )
     )
-
     .style(
         "cursor",
         "pointer"
     )
-
     .on(
         "click",
         function(event,d){
@@ -1469,9 +1434,7 @@ function draw(){
     );
 
 
-    drawDDDContours(
-        svg
-    );
+    drawDDDContours(svg);
 
     legend();
 
@@ -1479,7 +1442,7 @@ function draw(){
 
 
 /* =====================================================
-   CONTORNOS DDD
+   CONTORNOS DDD — CORRIGIDO
 ===================================================== */
 
 function drawDDDContours(svg){
@@ -1500,9 +1463,7 @@ function drawDDDContours(svg){
             f.properties.name
         );
 
-        if(
-            !spiNames.has(n)
-        ){
+        if(!spiNames.has(n)){
             return;
         }
 
@@ -1513,15 +1474,8 @@ function drawDDDContours(svg){
             return;
         }
 
-        if(
-            !grupos.has(g)
-        ){
-
-            grupos.set(
-                g,
-                []
-            );
-
+        if(!grupos.has(g)){
+            grupos.set(g,[]);
         }
 
         grupos
@@ -1542,17 +1496,40 @@ function drawDDDContours(svg){
                 features:features
             };
 
-            const server=
-            window.topojsonServer;
 
-            const client=
-            window.topojson;
+            /*
+             * CORREÇÃO:
+             * mantém compatibilidade com as duas formas
+             * em que as bibliotecas TopoJSON podem ser
+             * expostas no navegador.
+             */
+
+            const server=
+                window.topojsonServer
+                ||
+                window.topojson;
+
 
             if(
                 !server
                 ||
                 typeof server.topology!=="function"
-                ||
+            ){
+                return;
+            }
+
+
+            const topology=
+            server.topology({
+                municipios:fc
+            });
+
+
+            const client=
+                window.topojson;
+
+
+            if(
                 !client
                 ||
                 typeof client.merge!=="function"
@@ -1560,23 +1537,22 @@ function drawDDDContours(svg){
                 return;
             }
 
-            const topology=
-            server.topology({
-                municipios:fc
-            });
 
             const geometries=
-            topology
-            .objects
-            .municipios
-            .geometries;
+                topology
+                .objects
+                .municipios
+                .geometries;
+
 
             const merged=
-            client.merge(
-                topology,
-                geometries
-            );
+                client.merge(
+                    topology,
+                    geometries
+                );
 
+
+            /* CONTORNO FORTE DO DDD */
 
             svg
             .append("path")
@@ -1593,14 +1569,18 @@ function drawDDDContours(svg){
             )
             .attr(
                 "stroke",
-                "#374151"
+                "#111827"
             )
             .attr(
                 "stroke-width",
-                2.2
+                2.8
             )
             .attr(
                 "stroke-linejoin",
+                "round"
+            )
+            .attr(
+                "stroke-linecap",
                 "round"
             )
             .attr(
@@ -1609,10 +1589,12 @@ function drawDDDContours(svg){
             );
 
 
+            /* NOME DO DDD */
+
             const centroid=
-            path.centroid(
-                merged
-            );
+                path.centroid(
+                    merged
+                );
 
 
             if(
@@ -1649,7 +1631,7 @@ function drawDDDContours(svg){
         catch(err){
 
             console.warn(
-                "Falha DDD",
+                "Falha contorno DDD",
                 g,
                 err
             );
@@ -1668,10 +1650,10 @@ function drawDDDContours(svg){
 function legend(){
 
     const alvo=
-    document
-    .getElementById(
-        "legend"
-    );
+        document
+        .getElementById(
+            "legend"
+        );
 
 
     if(mode==="vivo"){
@@ -1739,32 +1721,32 @@ function legend(){
 function show(name){
 
     selectedMunicipio=
-    name;
+        name;
 
     const n=
-    norm(name);
+        norm(name);
 
     const p=
-    pop.get(n);
+        pop.get(n);
 
     const r=
-    renda.get(n);
+        renda.get(n);
 
     const v=
-    vivo.has(n);
+        vivo.has(n);
 
     const c=
-    claro.has(n);
+        claro.has(n);
 
     const opp=
-    opportunity.has(n);
+        opportunity.has(n);
 
     const group=
-    operationalGroup(n);
+        operationalGroup(n);
 
 
-    let rendaTexto=
-    "—";
+    let rendaTexto="—";
+
 
     if(
         Number.isFinite(r)
@@ -1773,16 +1755,16 @@ function show(name){
     ){
 
         rendaTexto=
-        r.toLocaleString(
-            "pt-BR",
-            {
-                style:"currency",
-                currency:"BRL",
-                maximumFractionDigits:0
-            }
-        )
-        +
-        " / mês";
+            r.toLocaleString(
+                "pt-BR",
+                {
+                    style:"currency",
+                    currency:"BRL",
+                    maximumFractionDigits:0
+                }
+            )
+            +
+            " / mês";
 
     }
 
@@ -1915,31 +1897,35 @@ async function carregarPrincipal(){
 
 
     const resultados=
-    await Promise.allSettled([
+        await Promise.allSettled([
 
-        fetch(geoUrl)
-        .then(r=>{
+            fetch(geoUrl)
+            .then(r=>{
 
-            if(!r.ok){
-                throw new Error("Falha GeoJSON");
-            }
+                if(!r.ok){
+                    throw new Error(
+                        "Falha GeoJSON"
+                    );
+                }
 
-            return r.json();
+                return r.json();
 
-        }),
+            }),
 
-        fetch(munUrl)
-        .then(r=>{
+            fetch(munUrl)
+            .then(r=>{
 
-            if(!r.ok){
-                throw new Error("Falha municípios");
-            }
+                if(!r.ok){
+                    throw new Error(
+                        "Falha municípios"
+                    );
+                }
 
-            return r.json();
+                return r.json();
 
-        })
+            })
 
-    ]);
+        ]);
 
 
     if(
@@ -1954,7 +1940,7 @@ async function carregarPrincipal(){
 
 
     geo=
-    resultados[0].value;
+        resultados[0].value;
 
 
     if(
@@ -1962,7 +1948,7 @@ async function carregarPrincipal(){
     ){
 
         const ms=
-        resultados[1].value;
+            resultados[1].value;
 
 
         ms
@@ -1973,14 +1959,14 @@ async function carregarPrincipal(){
         .forEach(x=>{
 
             const n=
-            norm(
-                x.nome
-            );
+                norm(
+                    x.nome
+                );
 
             const d=
-            Number(
-                x.ddd
-            );
+                Number(
+                    x.ddd
+                );
 
             ddd.set(
                 n,
@@ -2009,21 +1995,21 @@ async function carregarPrincipal(){
 
 
     projection=
-    d3
-    .geoMercator()
-    .fitExtent(
-        [
-            [15,15],
-            [885,595]
-        ],
-        geo
-    );
+        d3
+        .geoMercator()
+        .fitExtent(
+            [
+                [15,15],
+                [885,595]
+            ],
+            geo
+        );
 
 
     path=
-    d3.geoPath(
-        projection
-    );
+        d3.geoPath(
+            projection
+        );
 
 
     updateKpis();
@@ -2038,7 +2024,6 @@ async function carregarPrincipal(){
 
 
     carregarPopulacao();
-
     carregarRenda();
 
 }
@@ -2053,19 +2038,21 @@ async function carregarPopulacao(){
     try{
 
         const r=
-        await fetch(
-            popUrl
-        );
+            await fetch(
+                popUrl
+            );
 
         if(!r.ok){
+
             throw new Error(
                 "IBGE população indisponível"
             );
+
         }
 
 
         const pd=
-        await r.json();
+            await r.json();
 
 
         (
@@ -2079,24 +2066,24 @@ async function carregarPopulacao(){
         .forEach(s=>{
 
             const n=
-            norm(
+                norm(
+                    (
+                        s.localidade?.nome
+                        ||
+                        ""
+                    )
+                    .replace(
+                        /\s*-\s*SP\s*$/i,
+                        ""
+                    )
+                );
 
-                (
-                    s.localidade?.nome
-                    ||
-                    ""
-                )
-                .replace(
-                    /\s*-\s*SP\s*$/i,
-                    ""
-                )
-
-            );
 
             const v=
-            Number(
-                s.serie?.["2022"]
-            );
+                Number(
+                    s.serie?.["2022"]
+                );
+
 
             if(
                 n
@@ -2122,9 +2109,11 @@ async function carregarPopulacao(){
 
 
         if(selectedMunicipio){
+
             show(
                 selectedMunicipio
             );
+
         }
 
 
@@ -2132,7 +2121,6 @@ async function carregarPopulacao(){
         .getElementById("status")
         .innerHTML=
         '<span class="ok">Mapa carregado — população IBGE disponível</span>';
-
 
     }
     catch(err){
@@ -2162,23 +2150,24 @@ async function carregarRenda(){
     try{
 
         const r=
-        await fetch(
-            rendaUrl
-        );
+            await fetch(
+                rendaUrl
+            );
 
         if(!r.ok){
+
             throw new Error(
                 "IBGE renda indisponível"
             );
+
         }
 
 
         const rd=
-        await r.json();
+            await r.json();
 
 
-        let bloco=
-        null;
+        let bloco=null;
 
 
         for(
@@ -2186,11 +2175,11 @@ async function carregarRenda(){
         ){
 
             const variavel=
-            norm(
-                item.variavel
-                ||
-                ""
-            );
+                norm(
+                    item.variavel
+                    ||
+                    ""
+                );
 
 
             if(
@@ -2201,9 +2190,7 @@ async function carregarRenda(){
                 variavel.includes("PER CAPITA")
             ){
 
-                bloco=
-                item;
-
+                bloco=item;
                 break;
 
             }
@@ -2212,8 +2199,7 @@ async function carregarRenda(){
 
 
         if(!bloco){
-            bloco=
-            rd?.[0];
+            bloco=rd?.[0];
         }
 
 
@@ -2232,25 +2218,23 @@ async function carregarRenda(){
             .forEach(s=>{
 
                 const n=
-                norm(
-
-                    (
-                        s.localidade?.nome
-                        ||
-                        ""
-                    )
-                    .replace(
-                        /\s*-\s*SP\s*$/i,
-                        ""
-                    )
-
-                );
+                    norm(
+                        (
+                            s.localidade?.nome
+                            ||
+                            ""
+                        )
+                        .replace(
+                            /\s*-\s*SP\s*$/i,
+                            ""
+                        )
+                    );
 
 
                 const valor=
-                Number(
-                    s.serie?.["2022"]
-                );
+                    Number(
+                        s.serie?.["2022"]
+                    );
 
 
                 if(
@@ -2272,11 +2256,12 @@ async function carregarRenda(){
 
 
         if(selectedMunicipio){
+
             show(
                 selectedMunicipio
             );
-        }
 
+        }
 
     }
     catch(err){
@@ -2300,7 +2285,7 @@ document
 .onclick=()=>{
 
     mode=
-    "vivo";
+        "vivo";
 
     document
     .getElementById("t1")
@@ -2316,7 +2301,7 @@ document
     .getElementById("claroCard")
     .style
     .display=
-    "none";
+        "none";
 
     draw();
 
@@ -2337,7 +2322,7 @@ document
 .onclick=()=>{
 
     mode=
-    "claro";
+        "claro";
 
     document
     .getElementById("t2")
@@ -2353,7 +2338,7 @@ document
     .getElementById("claroCard")
     .style
     .display=
-    "block";
+        "block";
 
     draw();
 
@@ -2379,11 +2364,11 @@ carregarPrincipal()
     document
     .getElementById("status")
     .innerHTML=
-    '<span style="color:#b91c1c;font-weight:bold;">Erro ao carregar mapa: '
-    +
-    err.message
-    +
-    '</span>';
+        '<span style="color:#b91c1c;font-weight:bold;">Erro ao carregar mapa: '
+        +
+        err.message
+        +
+        '</span>';
 
 });
 
