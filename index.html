@@ -58,7 +58,7 @@ h1{
 }
 
 /* =====================================================
-   KPIs TOPO
+   KPIs
 ===================================================== */
 
 .kpi-strip{
@@ -91,12 +91,11 @@ h1{
     color:#111827;
 }
 
-.kpi-value.purple{
+.kpi-value.vivo-color{
     color:#6d28d9;
-    background:none;
 }
 
-.kpi-value.orange{
+.kpi-value.opportunity-color{
     color:#d97706;
 }
 
@@ -105,6 +104,10 @@ h1{
     font-size:11px;
     color:#6b7280;
 }
+
+/* =====================================================
+   DDD
+===================================================== */
 
 .ddd-summary{
     background:#fff;
@@ -132,20 +135,17 @@ h1{
     border:1px solid #d1d5db;
     background:#f9fafb;
     border-radius:8px;
-    padding:7px 9px;
+    padding:7px 11px;
     font-size:11px;
     line-height:1.25;
+    min-width:78px;
 }
 
 .ddd-mini-card strong{
     display:block;
-    font-size:17px;
-    color:#111827;
-    margin-top:2px;
-}
-
-.ddd-mini-card .missing{
+    font-size:18px;
     color:#dc2626;
+    margin-top:2px;
 }
 
 /* =====================================================
@@ -233,6 +233,11 @@ svg{
     font-weight:bold;
 }
 
+.warning{
+    color:#b45309;
+    font-weight:bold;
+}
+
 .ddd-label{
     font-size:13px;
     font-weight:800;
@@ -297,6 +302,7 @@ svg{
     .ddd-mini-card{
         font-size:10px;
         padding:5px 7px;
+        min-width:62px;
     }
 
     .ddd-mini-card strong{
@@ -331,7 +337,7 @@ Claro x Vivo
 </div>
 
 <!-- =====================================================
-     KPIs EXECUTIVOS
+     KPIs
 ===================================================== -->
 
 <div class="kpi-strip">
@@ -358,7 +364,7 @@ Total de municípios — Universo SPI
 Municípios com Vivo Fibra
 </div>
 
-<div class="kpi-value purple" id="kpiVivo">
+<div class="kpi-value vivo-color" id="kpiVivo">
 —
 </div>
 
@@ -390,12 +396,12 @@ Municípios sem Vivo Fibra
 Sem Vivo e população &gt; 25 mil hab.
 </div>
 
-<div class="kpi-value orange" id="kpiOpportunity">
+<div class="kpi-value opportunity-color" id="kpiOpportunity">
 —
 </div>
 
 <div class="kpi-desc" id="kpiOpportunityPct">
-Borda laranja no mapa
+Aguardando população IBGE
 </div>
 
 </div>
@@ -413,13 +419,13 @@ Municípios sem Vivo por DDD
 </div>
 
 <div class="ddd-summary-items" id="dddSummary">
-Calculando...
+Carregando divisão operacional...
 </div>
 
 </div>
 
 <!-- =====================================================
-     MAPA + LATERAL
+     MAPA
 ===================================================== -->
 
 <div class="grid">
@@ -427,7 +433,7 @@ Calculando...
 <div class="card">
 
 <div id="status">
-Carregando bases...
+Carregando mapa e divisão operacional...
 </div>
 
 <svg id="map" viewBox="0 0 900 610"></svg>
@@ -438,10 +444,6 @@ Carregando bases...
 
 <aside>
 
-<!-- =====================================================
-     MUNICÍPIO SELECIONADO
-===================================================== -->
-
 <div class="card">
 
 <div class="selected-title">
@@ -449,14 +451,12 @@ Município selecionado
 </div>
 
 <div id="details" style="margin-top:10px">
+
 Clique em um município para consultar população, renda, DDD e cobertura.
-</div>
 
 </div>
 
-<!-- =====================================================
-     CLARO x VIVO
-===================================================== -->
+</div>
 
 <div class="card" id="claroCard" style="display:none">
 
@@ -477,10 +477,6 @@ municípios dentro do recorte SPI
 </div>
 
 </div>
-
-<!-- =====================================================
-     DIVISÃO OPERACIONAL
-===================================================== -->
 
 <div class="card">
 
@@ -503,10 +499,6 @@ DDD 19
 </div>
 
 </div>
-
-<!-- =====================================================
-     FONTES
-===================================================== -->
 
 <div class="card">
 
@@ -535,18 +527,18 @@ Malha municipal: base geográfica municipal
 <script>
 
 /* =====================================================
-   NORMALIZAÇÃO + CORREÇÃO DE NOMES
+   NORMALIZAÇÃO
 ===================================================== */
 
 function norm(s){
 
     let n = String(s || "")
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g,"")
-    .toUpperCase()
-    .replace(/[^A-Z0-9 ]/g," ")
-    .replace(/\s+/g," ")
-    .trim();
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g,"")
+        .toUpperCase()
+        .replace(/[^A-Z0-9 ]/g," ")
+        .replace(/\s+/g," ")
+        .trim();
 
     const aliases = {
 
@@ -703,18 +695,16 @@ VOTUPORANGA
 
 const vivo=
 new Set(
-
     vivoRaw
-    .replace(/\n/g,"")
-    .split("|")
-    .map(norm)
-    .filter(Boolean)
-
+        .replace(/\n/g,"")
+        .split("|")
+        .map(norm)
+        .filter(Boolean)
 );
 
 
 /* =====================================================
-   BASE CLARO COMPLETA
+   BASE CLARO
 ===================================================== */
 
 const claroRaw=`
@@ -903,18 +893,16 @@ BERTIOGA
 
 const claro=
 new Set(
-
     claroRaw
-    .replace(/\n/g,"")
-    .split("|")
-    .map(norm)
-    .filter(Boolean)
-
+        .replace(/\n/g,"")
+        .split("|")
+        .map(norm)
+        .filter(Boolean)
 );
 
 
 /* =====================================================
-   VARIÁVEIS
+   ESTADO
 ===================================================== */
 
 let geo=null;
@@ -931,9 +919,11 @@ let spiNames=new Set();
 let opportunity=new Set();
 let claroSemVivo=new Set();
 
+let selectedMunicipio=null;
+
 
 /* =====================================================
-   RECORTE DDD 11
+   DDD 11
 ===================================================== */
 
 const jundiai=
@@ -995,435 +985,27 @@ const rendaUrl=
 
 
 /* =====================================================
-   CARREGAMENTO
-===================================================== */
-
-Promise.allSettled([
-
-    fetch(geoUrl).then(r=>r.json()),
-
-    fetch(munUrl).then(r=>r.json()),
-
-    fetch(popUrl).then(r=>r.json()),
-
-    fetch(rendaUrl).then(r=>r.json())
-
-])
-
-.then(results=>{
-
-
-    if(
-        results[0].status!=="fulfilled"
-    ){
-
-        throw new Error(
-            "Malha municipal indisponível"
-        );
-
-    }
-
-
-    geo=
-    results[0].value;
-
-
-    /* DDD */
-
-    const ms=
-
-    results[1].status==="fulfilled"
-
-    ?
-
-    results[1].value
-
-    :
-
-    [];
-
-
-    ms
-
-    .filter(
-        x=>
-        Number(x.codigo_uf)===35
-    )
-
-    .forEach(x=>{
-
-
-        const n=
-        norm(x.nome);
-
-
-        const d=
-        Number(x.ddd);
-
-
-        ddd.set(
-            n,
-            d
-        );
-
-
-        if(
-
-            dddsSPI.has(d)
-
-            ||
-
-            jundiai.has(n)
-
-            ||
-
-            osasco.has(n)
-
-        ){
-
-            spiNames.add(n);
-
-        }
-
-
-    });
-
-
-    /* POPULAÇÃO */
-
-    if(
-        results[2].status==="fulfilled"
-    ){
-
-        const pd=
-        results[2].value;
-
-
-        (
-            pd?.[0]
-            ?.resultados?.[0]
-            ?.series
-            ||
-            []
-        )
-
-        .forEach(s=>{
-
-
-            const n=
-            norm(
-
-                (
-                    s.localidade?.nome
-                    ||
-                    ""
-                )
-
-                .replace(
-                    /\s*-\s*SP\s*$/i,
-                    ""
-                )
-
-            );
-
-
-            const v=
-            Number(
-                s.serie?.["2022"]
-            );
-
-
-            if(
-                n &&
-                Number.isFinite(v)
-            ){
-
-                pop.set(
-                    n,
-                    v
-                );
-
-            }
-
-
-        });
-
-    }
-
-
-    /* RENDA */
-
-    if(
-        results[3].status==="fulfilled"
-    ){
-
-        try{
-
-
-            const rd=
-            results[3].value;
-
-
-            let bloco=null;
-
-
-            for(
-                const item of rd||[]
-            ){
-
-
-                const variavel=
-                norm(
-                    item.variavel||""
-                );
-
-
-                if(
-
-                    variavel.includes("RENDIMENTO")
-
-                    &&
-
-                    variavel.includes("DOMICILIAR")
-
-                    &&
-
-                    variavel.includes("PER CAPITA")
-
-                ){
-
-                    bloco=item;
-
-                    break;
-
-                }
-
-
-            }
-
-
-            if(!bloco){
-
-                bloco=
-                rd?.[0];
-
-            }
-
-
-            (
-                bloco?.resultados
-                ||
-                []
-            )
-
-            .forEach(resultado=>{
-
-
-                (
-                    resultado.series
-                    ||
-                    []
-                )
-
-                .forEach(s=>{
-
-
-                    const n=
-                    norm(
-
-                        (
-                            s.localidade?.nome
-                            ||
-                            ""
-                        )
-
-                        .replace(
-                            /\s*-\s*SP\s*$/i,
-                            ""
-                        )
-
-                    );
-
-
-                    const valor=
-                    Number(
-                        s.serie?.["2022"]
-                    );
-
-
-                    if(
-
-                        n
-
-                        &&
-
-                        Number.isFinite(valor)
-
-                    ){
-
-                        renda.set(
-                            n,
-                            valor
-                        );
-
-                    }
-
-
-                });
-
-
-            });
-
-
-        }
-
-        catch(err){
-
-            console.warn(
-                "Falha renda",
-                err
-            );
-
-        }
-
-    }
-
-
-    /* =====================================================
-       OPORTUNIDADES
-    ===================================================== */
-
-    opportunity=
-    new Set(
-
-        [...spiNames]
-
-        .filter(n=>
-
-            !vivo.has(n)
-
-            &&
-
-            (pop.get(n)||0)>25000
-
-        )
-
-    );
-
-
-    claroSemVivo=
-    new Set(
-
-        [...spiNames]
-
-        .filter(n=>
-
-            claro.has(n)
-
-            &&
-
-            !vivo.has(n)
-
-        )
-
-    );
-
-
-    /* =====================================================
-       KPIs SUPERIORES
-    ===================================================== */
-
-    updateKpis();
-
-
-    document
-    .getElementById("claroOpp")
-    .textContent=
-    claroSemVivo.size.toLocaleString("pt-BR");
-
-
-    /* =====================================================
-       PROJEÇÃO
-    ===================================================== */
-
-    projection=
-    d3
-    .geoMercator()
-    .fitExtent(
-        [
-            [15,15],
-            [885,595]
-        ],
-        geo
-    );
-
-
-    path=
-    d3.geoPath(
-        projection
-    );
-
-
-    draw();
-
-
-    document
-    .getElementById("status")
-    .innerHTML=
-    '<span class="ok">Mapa carregado — clique em um município</span>';
-
-
-})
-
-.catch(err=>{
-
-    document
-    .getElementById("status")
-    .textContent=
-    "Erro: "+err.message;
-
-});
-
-
-/* =====================================================
    GRUPO OPERACIONAL
 ===================================================== */
 
 function operationalGroup(n){
 
-
-    if(
-        osasco.has(n)
-    ){
-
+    if(osasco.has(n)){
         return "11-OSASCO";
-
     }
 
-
-    if(
-        jundiai.has(n)
-    ){
-
+    if(jundiai.has(n)){
         return "11-JUNDIAI";
-
     }
-
 
     const d=
     Number(
         ddd.get(n)
     );
 
-
-    if(
-        dddsSPI.has(d)
-    ){
-
+    if(dddsSPI.has(d)){
         return String(d);
-
     }
-
 
     return null;
 
@@ -1432,26 +1014,55 @@ function operationalGroup(n){
 
 function groupLabel(g){
 
-
-    if(
-        g==="11-OSASCO"
-    ){
-
+    if(g==="11-OSASCO"){
         return "DDD 11 • Osasco";
-
     }
 
-
-    if(
-        g==="11-JUNDIAI"
-    ){
-
+    if(g==="11-JUNDIAI"){
         return "DDD 11 • Jundiaí";
-
     }
-
 
     return "DDD "+g;
+
+}
+
+
+/* =====================================================
+   CÁLCULOS
+===================================================== */
+
+function calcularClaroSemVivo(){
+
+    claroSemVivo=
+    new Set(
+
+        [...spiNames]
+        .filter(
+            n=>
+            claro.has(n)
+            &&
+            !vivo.has(n)
+        )
+
+    );
+
+}
+
+
+function calcularOportunidades(){
+
+    opportunity=
+    new Set(
+
+        [...spiNames]
+        .filter(
+            n=>
+            !vivo.has(n)
+            &&
+            (pop.get(n)||0)>25000
+        )
+
+    );
 
 }
 
@@ -1462,9 +1073,8 @@ function groupLabel(g){
 
 function updateKpis(){
 
-    const universoSPI=
+    const universo=
     spiNames.size;
-
 
     const vivoSPI=
     [...spiNames]
@@ -1473,46 +1083,32 @@ function updateKpis(){
     )
     .length;
 
-
-    const semVivoSPI=
-    universoSPI-vivoSPI;
-
+    const semVivo=
+    universo-vivoSPI;
 
     const pctVivo=
-    universoSPI
+    universo
     ?
-    (vivoSPI/universoSPI)*100
+    (vivoSPI/universo)*100
     :
     0;
-
 
     const pctSemVivo=
-    universoSPI
+    universo
     ?
-    (semVivoSPI/universoSPI)*100
+    (semVivo/universo)*100
     :
     0;
-
-
-    const pctOpportunity=
-    universoSPI
-    ?
-    (opportunity.size/universoSPI)*100
-    :
-    0;
-
 
     document
     .getElementById("kpiUniverso")
     .textContent=
-    universoSPI.toLocaleString("pt-BR");
-
+    universo.toLocaleString("pt-BR");
 
     document
     .getElementById("kpiVivo")
     .textContent=
     vivoSPI.toLocaleString("pt-BR");
-
 
     document
     .getElementById("kpiVivoPct")
@@ -1526,12 +1122,10 @@ function updateKpis(){
     )
     +"% do universo";
 
-
     document
     .getElementById("kpiSemVivo")
     .textContent=
-    semVivoSPI.toLocaleString("pt-BR");
-
+    semVivo.toLocaleString("pt-BR");
 
     document
     .getElementById("kpiSemVivoPct")
@@ -1546,30 +1140,54 @@ function updateKpis(){
     +"% do universo";
 
 
-    document
-    .getElementById("kpiOpportunity")
-    .textContent=
-    opportunity.size.toLocaleString("pt-BR");
+    if(pop.size>0){
+
+        const pctOpportunity=
+        universo
+        ?
+        (opportunity.size/universo)*100
+        :
+        0;
+
+        document
+        .getElementById("kpiOpportunity")
+        .textContent=
+        opportunity.size.toLocaleString("pt-BR");
+
+        document
+        .getElementById("kpiOpportunityPct")
+        .textContent=
+        pctOpportunity.toLocaleString(
+            "pt-BR",
+            {
+                minimumFractionDigits:1,
+                maximumFractionDigits:1
+            }
+        )
+        +"% do universo • borda laranja";
+
+    }
 
 
     document
-    .getElementById("kpiOpportunityPct")
+    .getElementById("claroOpp")
     .textContent=
-    pctOpportunity.toLocaleString(
-        "pt-BR",
-        {
-            minimumFractionDigits:1,
-            maximumFractionDigits:1
-        }
-    )
-    +"% do universo • borda laranja";
+    claroSemVivo.size.toLocaleString("pt-BR");
 
 
-    /* =====================================================
-       SEM VIVO POR DDD
-    ===================================================== */
+    updateDDD();
+
+}
+
+
+/* =====================================================
+   SEM VIVO POR DDD
+===================================================== */
+
+function updateDDD(){
 
     const ordem=[
+
         "11-OSASCO",
         "11-JUNDIAI",
         "12",
@@ -1579,15 +1197,14 @@ function updateKpis(){
         "17",
         "18",
         "19"
-    ];
 
+    ];
 
     const resumo=
     new Map();
 
-
-    ordem.forEach(g=>{
-
+    ordem.forEach(
+        g=>
         resumo.set(
             g,
             {
@@ -1595,51 +1212,35 @@ function updateKpis(){
                 vivo:0,
                 semVivo:0
             }
-        );
-
-    });
+        )
+    );
 
 
     [...spiNames]
     .forEach(n=>{
 
-
         const g=
         operationalGroup(n);
-
 
         if(
             !g
             ||
             !resumo.has(g)
         ){
-
             return;
-
         }
-
 
         const item=
         resumo.get(g);
 
-
         item.total++;
 
-
-        if(
-            vivo.has(n)
-        ){
-
+        if(vivo.has(n)){
             item.vivo++;
-
         }
-
         else{
-
             item.semVivo++;
-
         }
-
 
     });
 
@@ -1648,50 +1249,26 @@ function updateKpis(){
     ordem
     .map(g=>{
 
-
         const item=
         resumo.get(g);
 
+        let label="DDD "+g;
 
-        const label=
+        if(g==="11-OSASCO"){
+            label="DDD 11<br>Osasco";
+        }
 
-        g==="11-OSASCO"
-
-        ?
-
-        "DDD 11<br>Osasco"
-
-        :
-
-        g==="11-JUNDIAI"
-
-        ?
-
-        "DDD 11<br>Jundiaí"
-
-        :
-
-        "DDD "+g;
-
+        if(g==="11-JUNDIAI"){
+            label="DDD 11<br>Jundiaí";
+        }
 
         return `
-
-        <div class="ddd-mini-card">
-
-            ${label}
-
-            <strong class="missing">
-                ${item.semVivo}
-            </strong>
-
-            <span>
+            <div class="ddd-mini-card">
+                ${label}
+                <strong>${item.semVivo}</strong>
                 sem Vivo
-            </span>
-
-        </div>
-
+            </div>
         `;
-
 
     })
     .join("");
@@ -1711,16 +1288,1088 @@ function updateKpis(){
 
 function fillColor(n){
 
-    if(
-        mode==="vivo"
-    ){
+    if(mode==="vivo"){
 
         return vivo.has(n)
-        ? "#6d28d9"
-        : "#ffffff";
+            ? "#6d28d9"
+            : "#ffffff";
+
+    }
+
+    if(claroSemVivo.has(n)){
+        return "#d62828";
+    }
+
+    if(vivo.has(n)){
+        return "#6d28d9";
+    }
+
+    return "#ffffff";
+
+}
+
+
+function strokeColor(n){
+
+    if(
+        mode==="vivo"
+        &&
+        opportunity.has(n)
+    ){
+
+        return "#f59e0b";
+
+    }
+
+    return "#9ca3af";
+
+}
+
+
+function strokeWidth(n){
+
+    if(
+        mode==="vivo"
+        &&
+        opportunity.has(n)
+    ){
+
+        return 2.1;
+
+    }
+
+    return 0.4;
+
+}
+
+
+/* =====================================================
+   MAPA
+===================================================== */
+
+function draw(){
+
+    if(
+        !geo
+        ||
+        !path
+    ){
+        return;
+    }
+
+    const svg=
+    d3.select("#map");
+
+    svg
+    .selectAll("*")
+    .remove();
+
+
+    svg
+    .append("g")
+    .attr(
+        "class",
+        "municipios"
+    )
+
+    .selectAll("path")
+
+    .data(
+        geo.features
+    )
+
+    .join("path")
+
+    .attr(
+        "d",
+        path
+    )
+
+    .attr(
+        "fill",
+        d=>
+        fillColor(
+            norm(
+                d.properties.name
+            )
+        )
+    )
+
+    .attr(
+        "stroke",
+        d=>
+        strokeColor(
+            norm(
+                d.properties.name
+            )
+        )
+    )
+
+    .attr(
+        "stroke-width",
+        d=>
+        strokeWidth(
+            norm(
+                d.properties.name
+            )
+        )
+    )
+
+    .style(
+        "cursor",
+        "pointer"
+    )
+
+    .on(
+        "click",
+        function(event,d){
+
+            show(
+                d.properties.name
+            );
+
+        }
+    );
+
+
+    drawDDDContours(
+        svg
+    );
+
+    legend();
+
+}
+
+
+/* =====================================================
+   CONTORNOS DDD
+===================================================== */
+
+function drawDDDContours(svg){
+
+    if(!geo){
+        return;
+    }
+
+    const grupos=
+    new Map();
+
+
+    geo.features
+    .forEach(f=>{
+
+        const n=
+        norm(
+            f.properties.name
+        );
+
+        if(
+            !spiNames.has(n)
+        ){
+            return;
+        }
+
+        const g=
+        operationalGroup(n);
+
+        if(!g){
+            return;
+        }
+
+        if(
+            !grupos.has(g)
+        ){
+
+            grupos.set(
+                g,
+                []
+            );
+
+        }
+
+        grupos
+        .get(g)
+        .push(f);
+
+    });
+
+
+    grupos
+    .forEach(
+        (features,g)=>{
+
+        try{
+
+            const fc={
+
+                type:"FeatureCollection",
+                features:features
+
+            };
+
+            const server=
+            window.topojsonServer;
+
+            const client=
+            window.topojson;
+
+            if(
+                !server
+                ||
+                typeof server.topology!=="function"
+                ||
+                !client
+                ||
+                typeof client.merge!=="function"
+            ){
+                return;
+            }
+
+            const topology=
+            server.topology({
+
+                municipios:fc
+
+            });
+
+            const geometries=
+            topology
+            .objects
+            .municipios
+            .geometries;
+
+            const merged=
+            client.merge(
+                topology,
+                geometries
+            );
+
+
+            svg
+            .append("path")
+            .datum(
+                merged
+            )
+            .attr(
+                "d",
+                path
+            )
+            .attr(
+                "fill",
+                "none"
+            )
+            .attr(
+                "stroke",
+                "#374151"
+            )
+            .attr(
+                "stroke-width",
+                2.2
+            )
+            .attr(
+                "stroke-linejoin",
+                "round"
+            )
+            .attr(
+                "pointer-events",
+                "none"
+            );
+
+
+            const centroid=
+            path.centroid(
+                merged
+            );
+
+
+            if(
+                Number.isFinite(centroid[0])
+                &&
+                Number.isFinite(centroid[1])
+            ){
+
+                svg
+                .append("text")
+                .attr(
+                    "class",
+                    "ddd-label"
+                )
+                .attr(
+                    "x",
+                    centroid[0]
+                )
+                .attr(
+                    "y",
+                    centroid[1]
+                )
+                .attr(
+                    "text-anchor",
+                    "middle"
+                )
+                .text(
+                    groupLabel(g)
+                );
+
+            }
+
+        }
+        catch(err){
+
+            console.warn(
+                "Falha DDD",
+                g,
+                err
+            );
+
+        }
+
+    });
+
+}
+
+
+/* =====================================================
+   LEGENDA
+===================================================== */
+
+function legend(){
+
+    const alvo=
+    document
+    .getElementById(
+        "legend"
+    );
+
+
+    if(mode==="vivo"){
+
+        alvo.innerHTML=`
+
+        <span>
+        <i class="sw purple"></i>
+        Vivo Fibra
+        </span>
+
+        <span>
+        <i class="sw orange-border"></i>
+        Sem Vivo e &gt;25 mil hab.
+        </span>
+
+        <span>
+        <i class="sw ddd-line"></i>
+        Limite de DDD
+        </span>
+
+        <span>
+        <i class="sw white"></i>
+        Demais municípios
+        </span>
+
+        `;
+
+    }
+    else{
+
+        alvo.innerHTML=`
+
+        <span>
+        <i class="sw red"></i>
+        Claro Fibra / Vivo ausente
+        </span>
+
+        <span>
+        <i class="sw purple"></i>
+        Vivo Fibra
+        </span>
+
+        <span>
+        <i class="sw ddd-line"></i>
+        Limite de DDD
+        </span>
+
+        <span>
+        <i class="sw white"></i>
+        Demais municípios
+        </span>
+
+        `;
+
+    }
+
+}
+
+
+/* =====================================================
+   MUNICÍPIO
+===================================================== */
+
+function show(name){
+
+    selectedMunicipio=
+    name;
+
+    const n=
+    norm(name);
+
+    const p=
+    pop.get(n);
+
+    const r=
+    renda.get(n);
+
+    const v=
+    vivo.has(n);
+
+    const c=
+    claro.has(n);
+
+    const opp=
+    opportunity.has(n);
+
+    const group=
+    operationalGroup(n);
+
+
+    let rendaTexto=
+    "—";
+
+    if(
+        Number.isFinite(r)
+        &&
+        r>0
+    ){
+
+        rendaTexto=
+        r.toLocaleString(
+
+            "pt-BR",
+
+            {
+                style:"currency",
+                currency:"BRL",
+                maximumFractionDigits:0
+            }
+
+        )
+        +
+        " / mês";
 
     }
 
 
+    document
+    .getElementById("details")
+    .innerHTML=`
+
+    <div class="row">
+        <b style="font-size:18px;">
+        ${name}
+        </b>
+    </div>
+
+    <div class="row">
+        Habitantes:
+        <b>
+        ${
+            Number.isFinite(p)
+            ?
+            p.toLocaleString("pt-BR")
+            :
+            "—"
+        }
+        </b>
+    </div>
+
+    <div class="row">
+        Renda domiciliar per capita:
+        <b>
+        ${rendaTexto}
+        </b>
+    </div>
+
+    <div class="row">
+        DDD:
+        <b>
+        ${
+            ddd.get(n)
+            ||
+            "—"
+        }
+        </b>
+    </div>
+
+    <div class="row">
+        Região operacional:
+        <b>
+        ${
+            group
+            ?
+            groupLabel(group)
+            :
+            "Fora do recorte SPI"
+        }
+        </b>
+    </div>
+
+    <div class="row">
+        Vivo Fibra:
+        <b>
+        ${
+            v
+            ?
+            "SIM"
+            :
+            "NÃO"
+        }
+        </b>
+    </div>
+
+    <div class="row">
+        Claro Fibra:
+        <b>
+        ${
+            c
+            ?
+            "SIM"
+            :
+            "NÃO"
+        }
+        </b>
+    </div>
+
+    <div class="row">
+        Claro presente e Vivo ausente:
+        <b>
+        ${
+            c && !v
+            ?
+            "SIM"
+            :
+            "NÃO"
+        }
+        </b>
+    </div>
+
+    <div class="row">
+        Oportunidade &gt;25 mil sem Vivo:
+        <b>
+        ${
+            pop.size===0
+            ?
+            "AGUARDANDO IBGE"
+            :
+            opp
+            ?
+            "SIM"
+            :
+            "NÃO"
+        }
+        </b>
+    </div>
+
+    `;
+
+}
+
+
+/* =====================================================
+   CARREGAMENTO PRINCIPAL
+===================================================== */
+
+async function carregarPrincipal(){
+
+    document
+    .getElementById("status")
+    .innerHTML=
+    '<span class="warning">Carregando mapa e divisão operacional...</span>';
+
+
+    const resultados=
+    await Promise.allSettled([
+
+        fetch(geoUrl)
+        .then(r=>{
+
+            if(!r.ok){
+                throw new Error("Falha GeoJSON");
+            }
+
+            return r.json();
+
+        }),
+
+        fetch(munUrl)
+        .then(r=>{
+
+            if(!r.ok){
+                throw new Error("Falha municípios");
+            }
+
+            return r.json();
+
+        })
+
+    ]);
+
+
     if(
-        claroSemVivo
+        resultados[0].status!=="fulfilled"
+    ){
+
+        throw new Error(
+            "Não foi possível carregar a malha do Estado de São Paulo."
+        );
+
+    }
+
+
+    geo=
+    resultados[0].value;
+
+
+    if(
+        resultados[1].status==="fulfilled"
+    ){
+
+        const ms=
+        resultados[1].value;
+
+
+        ms
+        .filter(
+            x=>
+            Number(x.codigo_uf)===35
+        )
+        .forEach(x=>{
+
+            const n=
+            norm(
+                x.nome
+            );
+
+            const d=
+            Number(
+                x.ddd
+            );
+
+            ddd.set(
+                n,
+                d
+            );
+
+
+            if(
+                dddsSPI.has(d)
+                ||
+                jundiai.has(n)
+                ||
+                osasco.has(n)
+            ){
+
+                spiNames.add(n);
+
+            }
+
+        });
+
+    }
+
+
+    calcularClaroSemVivo();
+
+
+    projection=
+    d3
+    .geoMercator()
+    .fitExtent(
+        [
+            [15,15],
+            [885,595]
+        ],
+        geo
+    );
+
+
+    path=
+    d3.geoPath(
+        projection
+    );
+
+
+    updateKpis();
+
+    draw();
+
+
+    document
+    .getElementById("status")
+    .innerHTML=
+    '<span class="ok">Mapa carregado — população e renda sendo atualizadas em segundo plano</span>';
+
+
+    carregarPopulacao();
+
+    carregarRenda();
+
+}
+
+
+/* =====================================================
+   POPULAÇÃO EM SEGUNDO PLANO
+===================================================== */
+
+async function carregarPopulacao(){
+
+    try{
+
+        const r=
+        await fetch(
+            popUrl
+        );
+
+        if(!r.ok){
+            throw new Error(
+                "IBGE população indisponível"
+            );
+        }
+
+
+        const pd=
+        await r.json();
+
+
+        (
+            pd?.[0]
+            ?.resultados?.[0]
+            ?.series
+            ||
+            []
+        )
+
+        .forEach(s=>{
+
+            const n=
+            norm(
+
+                (
+                    s.localidade?.nome
+                    ||
+                    ""
+                )
+                .replace(
+                    /\s*-\s*SP\s*$/i,
+                    ""
+                )
+
+            );
+
+            const v=
+            Number(
+                s.serie?.["2022"]
+            );
+
+            if(
+                n
+                &&
+                Number.isFinite(v)
+            ){
+
+                pop.set(
+                    n,
+                    v
+                );
+
+            }
+
+        });
+
+
+        calcularOportunidades();
+
+        updateKpis();
+
+        draw();
+
+
+        if(selectedMunicipio){
+
+            show(
+                selectedMunicipio
+            );
+
+        }
+
+
+        document
+        .getElementById("status")
+        .innerHTML=
+        '<span class="ok">Mapa carregado — população IBGE disponível</span>';
+
+
+    }
+    catch(err){
+
+        console.warn(
+            "População não carregada:",
+            err
+        );
+
+
+        document
+        .getElementById("kpiOpportunityPct")
+        .textContent=
+        "População IBGE temporariamente indisponível";
+
+
+        document
+        .getElementById("status")
+        .innerHTML=
+        '<span class="warning">Mapa carregado — população IBGE indisponível no momento</span>';
+
+    }
+
+}
+
+
+/* =====================================================
+   RENDA EM SEGUNDO PLANO
+===================================================== */
+
+async function carregarRenda(){
+
+    try{
+
+        const r=
+        await fetch(
+            rendaUrl
+        );
+
+        if(!r.ok){
+            throw new Error(
+                "IBGE renda indisponível"
+            );
+        }
+
+
+        const rd=
+        await r.json();
+
+
+        let bloco=
+        null;
+
+
+        for(
+            const item of rd||[]
+        ){
+
+            const variavel=
+            norm(
+                item.variavel
+                ||
+                ""
+            );
+
+
+            if(
+                variavel.includes("RENDIMENTO")
+                &&
+                variavel.includes("DOMICILIAR")
+                &&
+                variavel.includes("PER CAPITA")
+            ){
+
+                bloco=
+                item;
+
+                break;
+
+            }
+
+        }
+
+
+        if(!bloco){
+
+            bloco=
+            rd?.[0];
+
+        }
+
+
+        (
+            bloco?.resultados
+            ||
+            []
+        )
+        .forEach(resultado=>{
+
+            (
+                resultado.series
+                ||
+                []
+            )
+            .forEach(s=>{
+
+                const n=
+                norm(
+
+                    (
+                        s.localidade?.nome
+                        ||
+                        ""
+                    )
+                    .replace(
+                        /\s*-\s*SP\s*$/i,
+                        ""
+                    )
+
+                );
+
+
+                const valor=
+                Number(
+                    s.serie?.["2022"]
+                );
+
+
+                if(
+                    n
+                    &&
+                    Number.isFinite(valor)
+                ){
+
+                    renda.set(
+                        n,
+                        valor
+                    );
+
+                }
+
+            });
+
+        });
+
+
+        if(selectedMunicipio){
+
+            show(
+                selectedMunicipio
+            );
+
+        }
+
+
+    }
+    catch(err){
+
+        console.warn(
+            "Renda não carregada:",
+            err
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   ABA VIVO
+===================================================== */
+
+document
+.getElementById("t1")
+.onclick=()=>{
+
+    mode=
+    "vivo";
+
+    document
+    .getElementById("t1")
+    .classList
+    .add("on");
+
+    document
+    .getElementById("t2")
+    .classList
+    .remove("on");
+
+    document
+    .getElementById("claroCard")
+    .style
+    .display=
+    "none";
+
+    draw();
+
+    document
+    .getElementById("status")
+    .innerHTML=
+    '<span class="ok">Cobertura Vivo + oportunidades &gt;25 mil habitantes</span>';
+
+};
+
+
+/* =====================================================
+   ABA CLARO
+===================================================== */
+
+document
+.getElementById("t2")
+.onclick=()=>{
+
+    mode=
+    "claro";
+
+    document
+    .getElementById("t2")
+    .classList
+    .add("on");
+
+    document
+    .getElementById("t1")
+    .classList
+    .remove("on");
+
+    document
+    .getElementById("claroCard")
+    .style
+    .display=
+    "block";
+
+    draw();
+
+    document
+    .getElementById("status")
+    .innerHTML=
+    '<span class="ok">Vermelho = Claro presente e Vivo ausente</span>';
+
+};
+
+
+/* =====================================================
+   INÍCIO
+===================================================== */
+
+carregarPrincipal()
+.catch(err=>{
+
+    console.error(
+        err
+    );
+
+    document
+    .getElementById("status")
+    .innerHTML=
+    '<span style="color:#b91c1c;font-weight:bold;">Erro ao carregar mapa: '
+    +
+    err.message
+    +
+    '</span>';
+
+});
+
+</script>
+
+</body>
+</html>
