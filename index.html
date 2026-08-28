@@ -23,33 +23,37 @@ body{
 .wrap{
     max-width:1450px;
     margin:auto;
-    padding:20px;
+    padding:10px 14px;
 }
 
 h1{
     color:#5b21b6;
-    margin:0 0 4px;
+    margin:0 0 2px;
+    font-size:24px;
+    line-height:1.05;
 }
 
 .sub{
     color:#666;
-    margin-bottom:14px;
+    margin-bottom:5px;
+    font-size:11px;
 }
 
 .tabs{
     display:flex;
-    gap:8px;
-    margin:16px 0;
+    gap:6px;
+    margin:6px 0 8px;
     flex-wrap:wrap;
 }
 
 .tab{
-    padding:12px 16px;
+    padding:7px 12px;
     border:1px solid #ccc;
-    border-radius:10px;
+    border-radius:8px;
     background:#fff;
     font-weight:700;
     cursor:pointer;
+    font-size:11px;
 }
 
 .tab.on{
@@ -64,28 +68,29 @@ h1{
 .kpi-strip{
     display:grid;
     grid-template-columns:repeat(4,minmax(0,1fr));
-    gap:10px;
-    margin:12px 0;
+    gap:7px;
+    margin:6px 0 7px;
 }
 
 .kpi-card{
     background:#fff;
     border:1px solid #ddd;
-    border-radius:14px;
-    padding:14px;
-    min-height:88px;
+    border-radius:10px;
+    padding:8px 10px;
+    min-height:52px;
 }
 
 .kpi-label{
-    font-size:11px;
+    font-size:9px;
     color:#6b7280;
     text-transform:uppercase;
     font-weight:700;
-    margin-bottom:8px;
+    margin-bottom:3px;
+    line-height:1.1;
 }
 
 .kpi-value{
-    font-size:32px;
+    font-size:25px;
     line-height:1;
     font-weight:800;
     color:#111827;
@@ -100,9 +105,10 @@ h1{
 }
 
 .kpi-desc{
-    margin-top:7px;
-    font-size:11px;
+    margin-top:3px;
+    font-size:9px;
     color:#6b7280;
+    line-height:1.1;
 }
 
 /* =====================================================
@@ -112,40 +118,45 @@ h1{
 .ddd-summary{
     background:#fff;
     border:1px solid #ddd;
-    border-radius:14px;
-    padding:12px 14px;
-    margin-bottom:12px;
+    border-radius:10px;
+    padding:6px 9px;
+    margin-bottom:7px;
 }
 
 .ddd-summary-title{
-    font-size:11px;
+    font-size:9px;
     color:#6b7280;
     text-transform:uppercase;
     font-weight:700;
-    margin-bottom:8px;
+    margin-bottom:4px;
 }
 
 .ddd-summary-items{
-    display:flex;
-    gap:7px;
-    flex-wrap:wrap;
+    display:grid;
+    grid-template-columns:repeat(9,1fr);
+    gap:4px;
 }
 
 .ddd-mini-card{
     border:1px solid #d1d5db;
     background:#f9fafb;
-    border-radius:8px;
-    padding:7px 11px;
-    font-size:11px;
-    line-height:1.25;
-    min-width:78px;
+    border-radius:6px;
+    padding:4px 5px;
+    font-size:8px;
+    line-height:1.1;
+    text-align:center;
+    min-width:0;
 }
 
 .ddd-mini-card strong{
     display:block;
-    font-size:18px;
+    font-size:14px;
     color:#dc2626;
-    margin-top:2px;
+    margin-top:1px;
+}
+
+.ddd-mini-card br{
+    display:none;
 }
 
 /* =====================================================
@@ -154,17 +165,22 @@ h1{
 
 .grid{
     display:grid;
-    grid-template-columns:minmax(0,1fr) 360px;
-    gap:18px;
+    grid-template-columns:minmax(0,1fr) 320px;
+    gap:10px;
     align-items:start;
 }
 
 .card{
     background:#fff;
     border:1px solid #ddd;
-    border-radius:14px;
-    padding:16px;
-    margin-bottom:12px;
+    border-radius:10px;
+    padding:10px;
+    margin-bottom:7px;
+}
+
+#status{
+    font-size:10px;
+    margin-bottom:0;
 }
 
 svg{
@@ -173,12 +189,17 @@ svg{
     display:block;
 }
 
+#map{
+    width:100%;
+    max-height:560px;
+}
+
 .sw{
     display:inline-block;
-    width:17px;
-    height:17px;
+    width:12px;
+    height:12px;
     border:1px solid #777;
-    margin-right:6px;
+    margin-right:4px;
     vertical-align:middle;
 }
 
@@ -196,35 +217,35 @@ svg{
 
 .orange-border{
     background:#fff;
-    border:3px solid #f59e0b;
+    border:2px solid #f59e0b;
 }
 
 .ddd-line{
     background:#fff;
-    border:3px solid #374151;
+    border:2px solid #374151;
 }
 
 .legend{
     display:flex;
-    gap:16px;
+    gap:10px;
     flex-wrap:wrap;
-    margin-top:12px;
-    font-size:14px;
+    margin-top:5px;
+    font-size:10px;
 }
 
 .big{
-    font-size:38px;
+    font-size:28px;
     font-weight:700;
 }
 
 .muted{
-    font-size:12px;
+    font-size:10px;
     color:#666;
-    line-height:1.5;
+    line-height:1.4;
 }
 
 .row{
-    padding:9px 0;
+    padding:5px 0;
     border-bottom:1px solid #eee;
 }
 
@@ -239,7 +260,7 @@ svg{
 }
 
 .ddd-label{
-    font-size:13px;
+    font-size:12px;
     font-weight:800;
     fill:#111827;
     paint-order:stroke;
@@ -250,12 +271,13 @@ svg{
 }
 
 #details{
-    min-height:310px;
+    min-height:0;
+    font-size:11px;
 }
 
 .selected-title{
     color:#5b21b6;
-    font-size:18px;
+    font-size:15px;
     font-weight:800;
 }
 
@@ -263,6 +285,10 @@ svg{
 
     .kpi-strip{
         grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+
+    .ddd-summary-items{
+        grid-template-columns:repeat(5,1fr);
     }
 
 }
@@ -278,35 +304,59 @@ svg{
 @media(max-width:600px){
 
     .wrap{
-        padding:10px;
+        padding:8px;
     }
 
     .kpi-strip{
         grid-template-columns:1fr 1fr;
-        gap:7px;
-    }
-
-    .kpi-card{
-        padding:10px;
-        min-height:75px;
-    }
-
-    .kpi-value{
-        font-size:25px;
-    }
-
-    .ddd-summary-items{
         gap:5px;
     }
 
-    .ddd-mini-card{
-        font-size:10px;
-        padding:5px 7px;
-        min-width:62px;
+    .kpi-card{
+        padding:7px;
+        min-height:48px;
     }
 
-    .ddd-mini-card strong{
-        font-size:15px;
+    .kpi-value{
+        font-size:22px;
+    }
+
+    .ddd-summary-items{
+        grid-template-columns:repeat(3,1fr);
+        gap:4px;
+    }
+
+}
+
+@media(max-height:800px) and (min-width:851px){
+
+    .wrap{
+        padding-top:6px;
+    }
+
+    h1{
+        font-size:21px;
+    }
+
+    .sub{
+        font-size:10px;
+    }
+
+    .kpi-card{
+        min-height:45px;
+        padding:6px 9px;
+    }
+
+    .kpi-value{
+        font-size:22px;
+    }
+
+    .ddd-summary{
+        padding:5px 8px;
+    }
+
+    #map{
+        max-height:500px;
     }
 
 }
@@ -450,7 +500,7 @@ Carregando mapa e divisão operacional...
 Município selecionado
 </div>
 
-<div id="details" style="margin-top:10px">
+<div id="details" style="margin-top:8px">
 
 Clique em um município para consultar população, renda, DDD e cobertura.
 
@@ -484,17 +534,12 @@ municípios dentro do recorte SPI
 Divisão operacional
 </b>
 
-<div class="muted" style="margin-top:8px">
+<div class="muted" style="margin-top:6px">
 
 DDD 11 — Grande Osasco<br>
 DDD 11 — Grande Jundiaí<br>
-DDD 12<br>
-DDD 14<br>
-DDD 15<br>
-DDD 16<br>
-DDD 17<br>
-DDD 18<br>
-DDD 19
+DDD 12 • DDD 14 • DDD 15<br>
+DDD 16 • DDD 17 • DDD 18 • DDD 19
 
 </div>
 
@@ -506,7 +551,7 @@ DDD 19
 Fontes
 </b>
 
-<div class="muted" style="margin-top:8px">
+<div class="muted" style="margin-top:6px">
 
 Vivo: base operacional informada<br>
 Claro: relação municipal de cidades com Claro Fibra<br>
@@ -541,10 +586,8 @@ function norm(s){
         .trim();
 
     const aliases = {
-
         "MOJI MIRIM":"MOGI MIRIM",
         "MOJI GUACU":"MOGI GUACU"
-
     };
 
     return aliases[n] || n;
@@ -928,7 +971,6 @@ let selectedMunicipio=null;
 
 const jundiai=
 new Set([
-
     "CABREUVA",
     "CAMPO LIMPO PAULISTA",
     "ITUPEVA",
@@ -936,13 +978,11 @@ new Set([
     "JUNDIAI",
     "LOUVEIRA",
     "VARZEA PAULISTA"
-
 ]);
 
 
 const osasco=
 new Set([
-
     "OSASCO",
     "BARUERI",
     "CARAPICUIBA",
@@ -951,7 +991,6 @@ new Set([
     "JANDIRA",
     "PIRAPORA DO BOM JESUS",
     "SANTANA DE PARNAIBA"
-
 ]);
 
 
@@ -1164,7 +1203,7 @@ function updateKpis(){
                 maximumFractionDigits:1
             }
         )
-        +"% do universo • borda laranja";
+        +"% • borda laranja";
 
     }
 
@@ -1187,7 +1226,6 @@ function updateKpis(){
 function updateDDD(){
 
     const ordem=[
-
         "11-OSASCO",
         "11-JUNDIAI",
         "12",
@@ -1197,7 +1235,6 @@ function updateDDD(){
         "17",
         "18",
         "19"
-
     ];
 
     const resumo=
@@ -1255,11 +1292,11 @@ function updateDDD(){
         let label="DDD "+g;
 
         if(g==="11-OSASCO"){
-            label="DDD 11<br>Osasco";
+            label="DDD 11 Osasco";
         }
 
         if(g==="11-JUNDIAI"){
-            label="DDD 11<br>Jundiaí";
+            label="DDD 11 Jundiaí";
         }
 
         return `
@@ -1501,10 +1538,8 @@ function drawDDDContours(svg){
         try{
 
             const fc={
-
                 type:"FeatureCollection",
                 features:features
-
             };
 
             const server=
@@ -1527,9 +1562,7 @@ function drawDDDContours(svg){
 
             const topology=
             server.topology({
-
                 municipios:fc
-
             });
 
             const geometries=
@@ -1741,15 +1774,12 @@ function show(name){
 
         rendaTexto=
         r.toLocaleString(
-
             "pt-BR",
-
             {
                 style:"currency",
                 currency:"BRL",
                 maximumFractionDigits:0
             }
-
         )
         +
         " / mês";
@@ -1762,7 +1792,7 @@ function show(name){
     .innerHTML=`
 
     <div class="row">
-        <b style="font-size:18px;">
+        <b style="font-size:16px;">
         ${name}
         </b>
     </div>
@@ -1781,7 +1811,7 @@ function show(name){
     </div>
 
     <div class="row">
-        Renda domiciliar per capita:
+        Renda per capita:
         <b>
         ${rendaTexto}
         </b>
@@ -1799,7 +1829,7 @@ function show(name){
     </div>
 
     <div class="row">
-        Região operacional:
+        Região:
         <b>
         ${
             group
@@ -1838,7 +1868,7 @@ function show(name){
     </div>
 
     <div class="row">
-        Claro presente e Vivo ausente:
+        Claro sem Vivo:
         <b>
         ${
             c && !v
@@ -1851,7 +1881,7 @@ function show(name){
     </div>
 
     <div class="row">
-        Oportunidade &gt;25 mil sem Vivo:
+        Oportunidade &gt;25 mil:
         <b>
         ${
             pop.size===0
@@ -1881,7 +1911,7 @@ async function carregarPrincipal(){
     document
     .getElementById("status")
     .innerHTML=
-    '<span class="warning">Carregando mapa e divisão operacional...</span>';
+    '<span class="warning">Carregando mapa...</span>';
 
 
     const resultados=
@@ -1917,7 +1947,7 @@ async function carregarPrincipal(){
     ){
 
         throw new Error(
-            "Não foi possível carregar a malha do Estado de São Paulo."
+            "Não foi possível carregar a malha de São Paulo."
         );
 
     }
@@ -2004,7 +2034,7 @@ async function carregarPrincipal(){
     document
     .getElementById("status")
     .innerHTML=
-    '<span class="ok">Mapa carregado — população e renda sendo atualizadas em segundo plano</span>';
+    '<span class="ok">Mapa carregado</span>';
 
 
     carregarPopulacao();
@@ -2015,7 +2045,7 @@ async function carregarPrincipal(){
 
 
 /* =====================================================
-   POPULAÇÃO EM SEGUNDO PLANO
+   POPULAÇÃO
 ===================================================== */
 
 async function carregarPopulacao(){
@@ -2092,11 +2122,9 @@ async function carregarPopulacao(){
 
 
         if(selectedMunicipio){
-
             show(
                 selectedMunicipio
             );
-
         }
 
 
@@ -2118,13 +2146,7 @@ async function carregarPopulacao(){
         document
         .getElementById("kpiOpportunityPct")
         .textContent=
-        "População IBGE temporariamente indisponível";
-
-
-        document
-        .getElementById("status")
-        .innerHTML=
-        '<span class="warning">Mapa carregado — população IBGE indisponível no momento</span>';
+        "População IBGE indisponível";
 
     }
 
@@ -2132,7 +2154,7 @@ async function carregarPopulacao(){
 
 
 /* =====================================================
-   RENDA EM SEGUNDO PLANO
+   RENDA
 ===================================================== */
 
 async function carregarRenda(){
@@ -2190,10 +2212,8 @@ async function carregarRenda(){
 
 
         if(!bloco){
-
             bloco=
             rd?.[0];
-
         }
 
 
@@ -2252,11 +2272,9 @@ async function carregarRenda(){
 
 
         if(selectedMunicipio){
-
             show(
                 selectedMunicipio
             );
-
         }
 
 
@@ -2305,7 +2323,7 @@ document
     document
     .getElementById("status")
     .innerHTML=
-    '<span class="ok">Cobertura Vivo + oportunidades &gt;25 mil habitantes</span>';
+    '<span class="ok">Cobertura Vivo + oportunidades &gt;25 mil</span>';
 
 };
 
